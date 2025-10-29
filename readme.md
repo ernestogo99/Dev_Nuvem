@@ -1,24 +1,24 @@
-## A definir
+## Pretty cake
 
-O objetivo deste projeto é desenvolver uma aplicação fullstacks utilizando os seguintes recursos da
-aws: EC2,S3,RDS,DYNAMODB E SNS/SQS
+This project is a menu for a candy shop, we will use these aws resources:
+EC2,S3,RDS,DYNAMODB E SNS/SQS
 
-## Equipe
+## Team
 
 - Ernesto Dalva
 - Guilherme Barbosa
 - Bruna Gomes
 - Marcos Antonio
 
-## Tecnologias utilizadas
+## Technologies Used
 
-- Java: Linguagem de programação para o back-end
-- Spring boot: Framework utilizado para o desenvolvimento de apis
-- Typescript: Linguagem escolhida para o front-end
-- React: Biblioteca de componentes utilizada para o front-end
-- RDS: Serviço que permite criar, configurar e gerenciar banco de dados relacionais na aws
-- EC2: Serviço que permite criar e gerenciar servidores virtuais na nuvem
-- S3: Serviço que permite guardar e recuperar arquivos
-- DynamoDB: Serviço de Banco de dados não relacional rápido e flexível gerenciado pela aws
-- SNS: Serviço de publicação e assinatura de mensagens
-- SQS: Serviço de fila de mensagens
+- Java: Programming language for back-end
+- Spring boot: framework used for apis development
+- Typescript: Programming language for front-end
+- React: Library for building user interfaces on the front-end
+- RDS: Service that allows creating, configuring, and managing relational databases on AWS
+- EC2: Service that allows creating and managing virtual servers in the cloud
+- S3: Service that enables storing and retrieving files
+- DynamoDB: Fast and flexible NoSQL database service managed by AWS
+- SNS: Publish/subscribe messaging service
+- SQS: Message queue service for decoupling and scaling distributed systems

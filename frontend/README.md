@@ -1,40 +1,41 @@
-## Como rodar o projeto
+## How to Run the Project
 
-1. Instale as dependências com:
+1. Install the dependencies:
    ```sh
    npm install
    ```
-2. Rode o projeto com:
+2. Run the project:
    ```sh
    npm run dev
    ```
 
-## Estrutura de pastas
+## Project Folder Structure
 
 ```
 /my-react-app
 │── /public
 │
 │── /src
-│   ├── /assets         # Imagens, ícones, estilos globais, fontes etc.
-│   ├── /pages          # Páginas principais da aplicação
-│   ├── /routes         # Configuração das rotas da aplicação
-│   ├── /shared         # Recursos compartilhados
-│   │   ├── /components # Componentes reutilizáveis (botões, tabelas, inputs, etc.)
-│   │   ├── /contexts   # Contextos do React (Context API)
+│   ├── /assets         # Images, icons, global styles, fonts, etc.
+│   ├── /pages          # Main pages of the application
+│   ├── /routes         # Application route configuration
+│   ├── /shared         # Shared resources
+│   │   ├── /components # Reusable components (buttons, tables, inputs, etc.)
+│   │   ├── /contexts   # React Contexts (Context API)
 │   │
-│   │   ├── /interfaces # Tipagens e interfaces TypeScript
-│   │   ├── /layout     # Layouts padrão (ex: com menu lateral, cabeçalho etc.)
-│   │   ├── /services   # Serviços de API, requisições HTTP etc.
+│   │   ├── /interfaces # TypeScript types and interfaces
+│   │   ├── /layout     # Standard layouts (e.g., with sidebar, header, etc.)
+│   │   ├── /services   # API services, HTTP requests, etc.
 │   │
 │
-│   ├── App.tsx         # Componente principal da aplicação
-│   ├── main.tsx        # Ponto de entrada do React
-│   ├── vite.config.ts  # Configuração do Vite (se estiver usando Vite)
+│   ├── App.tsx         # Main application component
+│   ├── main.tsx        # React entry point
+│   ├── vite.config.ts  # Vite configuration file (if using Vite)
 │
 │── package.json
-│── tsconfig.json       # Configuração do TypeScript
-│── .eslintrc.js        # Configuração do ESLint
+│── tsconfig.json       # TypeScript configuration
+│── .eslintrc.js        # ESLint configuration
 │── .gitignore
+
 
 ```
