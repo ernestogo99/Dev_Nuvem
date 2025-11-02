@@ -5,6 +5,8 @@ import com.example.demo.domain.enums.CandyType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @Setter
@@ -15,13 +17,13 @@ public class Candy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
-    private String price;
+    private BigDecimal price;
 
     @Column(nullable = false)
     private String description;
