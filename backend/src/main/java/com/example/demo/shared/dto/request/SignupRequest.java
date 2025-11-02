@@ -15,7 +15,7 @@ public record SignupRequest(
     String email,
 
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$",
-    message = "Password must contain at least one alphabetical character, one digit, one special character, and be at least 8 characters long.")
+    message = "Password must contain at least one alphabetical character, one digit, one special character, and be at least 6 characters long.")
     @NotBlank(message = "Password cannot be blank")
     @Size(min = 6, message = "Password must have at least 6 characters")
     String password

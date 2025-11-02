@@ -4,6 +4,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonPropertyOrder(alphabetic = true)
 record FieldError(
-        String message,
-        String field) {
+        String field,
+        String message) {
 }

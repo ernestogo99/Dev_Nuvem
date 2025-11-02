@@ -13,7 +13,7 @@ public class LoginAttemptRepository {
 
     private static final int RECENT_COUNT = 10;
     private static final String INSERT = "INSERT INTO public.login_attempt (email, success, created_at) VALUES(:email, :success, :createdAt)";
-    private static final String FIND_RECENT = "SELECT * FROM public.login_attempt WHERE email = :email ORDER BY created_at LIMIT :recentCount";
+    private static final String FIND_RECENT = "SELECT * FROM public.login_attempt WHERE email = :email ORDER BY created_at DESC LIMIT :recentCount";
 
     private final JdbcClient jdbcClient;
 

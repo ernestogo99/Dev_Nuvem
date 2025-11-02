@@ -2,7 +2,7 @@ package com.example.demo.security.configs;
 
 
 import java.io.IOException;
-import java.nio.file.AccessDeniedException;
+import com.example.demo.exceptions.AccessDeniedException;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

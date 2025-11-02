@@ -37,7 +37,7 @@ public class JwtHelper {
 
     public static Boolean validateToken(String token, UserDetails userDetails){
         final String username = extractUsername(token);
-        return username.equals(userDetails.getUsername()) && isTokenExpired(token);
+        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
     private static Claims getTokenBody(String token){
