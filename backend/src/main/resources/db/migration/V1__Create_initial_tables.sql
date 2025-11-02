@@ -1,8 +1,8 @@
 -- Create schema
--- CREATE SCHEMA IF NOT EXISTS public;
+ CREATE SCHEMA IF NOT EXISTS public;
 
 -- Create user table
-CREATE TABLE public.user (
+CREATE TABLE public.users (
     id SERIAL PRIMARY KEY,
     full_name VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,

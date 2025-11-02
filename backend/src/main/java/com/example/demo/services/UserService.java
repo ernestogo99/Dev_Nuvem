@@ -2,7 +2,7 @@ package com.example.demo.services;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.domain.model.User;
+import com.example.demo.domain.model.Users;
 import com.example.demo.exceptions.DuplicateException;
 import com.example.demo.infra.repositories.UserRepository;
 import com.example.demo.shared.dto.request.SignupRequest;
@@ -29,14 +29,14 @@ public class UserService {
     @Transactional
     public void signup(SignupRequest request){
         String email = request.email();
-        Optional<User> existingUser = repository.findByEmail(email);
+        Optional<Users> existingUser = repository.findByEmail(email);
 
         if(existingUser.isPresent()){
             throw new DuplicateException(String.format("User with the email address '%s' already exists", email));
         }
 
         String hashedPassword = passwordEncoder.encode(request.password());
-        User user = new User(request.email(), hashedPassword, request.fullName(), LocalDateTime.now());
+        Users user = new Users(request.email(), hashedPassword, request.fullName(), LocalDateTime.now());
         repository.add(user);
     }
 

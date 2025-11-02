@@ -16,17 +16,17 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "users")
+public class Users {
 
-    public User(String email, String password, String fullName, LocalDateTime createdAt){
+    public Users(String email, String password, String fullName, LocalDateTime createdAt){
         this.email = email;
         this.password = password;
         this.fullName = fullName;
         this.createdAt = createdAt;
     }   
 
-    public User(){}
+    public Users(){}
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

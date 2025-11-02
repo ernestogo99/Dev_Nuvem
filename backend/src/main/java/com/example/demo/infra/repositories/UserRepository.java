@@ -6,13 +6,13 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
-import com.example.demo.domain.model.User;
+import com.example.demo.domain.model.Users;
 
 @Repository
 public class UserRepository{
-   private static final String INSERT = "INSERT INTO public.user (full_name, email, password, role) VALUES(:full_name, :email, :password, :role)";
-   private static final String FIND_BY_EMAIL = "SELECT * FROM public.user WHERE email = :email";
-   private static final String GET_FULLNAME = "SELECT full_name FROM public.user WHERE email = :email";
+   private static final String INSERT = "INSERT INTO public.users (full_name, email, password, role) VALUES(:full_name, :email, :password, :role)";
+   private static final String FIND_BY_EMAIL = "SELECT * FROM public.users WHERE email = :email";
+   private static final String GET_FULLNAME = "SELECT full_name FROM public.users WHERE email = :email";
 
    private final JdbcClient jdbcClient;
 
@@ -20,7 +20,7 @@ public class UserRepository{
     this.jdbcClient = jdbcClient;
    }
 
-   public void add(User user){
+   public void add(Users user){
         long affected = jdbcClient.sql(INSERT)
             .param("full_name", user.getFullName())
             .param("email", user.getEmail())
@@ -31,10 +31,10 @@ public class UserRepository{
         Assert.isTrue(affected == 1, "Could not add user.");   
     }
 
-   public Optional<User> findByEmail(String email){
+   public Optional<Users> findByEmail(String email){
         return jdbcClient.sql(FIND_BY_EMAIL)
         .param("email", email)
-        .query(User.class)
+        .query(Users.class)
         .optional();
    }
 

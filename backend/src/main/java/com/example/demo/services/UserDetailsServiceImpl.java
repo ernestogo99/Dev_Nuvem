@@ -2,9 +2,10 @@ package com.example.demo.services;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.domain.model.User;
+import com.example.demo.domain.model.Users;
 import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.infra.repositories.UserRepository;
 
@@ -18,8 +19,8 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String email){
-        User user = repository.findByEmail(email).orElseThrow(() ->
-            new NotFoundException(String.format("User does not exist, email: %s", email))
+        Users user = repository.findByEmail(email).orElseThrow(() ->
+            new UsernameNotFoundException(String.format("User does not exist, email: %s", email))
         );
         
         return org.springframework.security.core.userdetails.User.builder()
