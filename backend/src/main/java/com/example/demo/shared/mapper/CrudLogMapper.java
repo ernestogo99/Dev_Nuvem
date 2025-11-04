@@ -6,6 +6,8 @@ import com.example.demo.domain.model.CrudLog;
 import com.example.demo.shared.dto.request.CrudLogRequestDTO;
 import com.example.demo.shared.dto.response.CrudLogResponseDTO;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 import java.util.List;
 
@@ -13,6 +15,8 @@ import java.util.List;
 public interface CrudLogMapper {
 
     CrudLog toEntity(CrudLogRequestDTO crudLogRequestDTO);
+
+
 
     CrudLogRequestDTO toRequestDTO(CrudLog crudLog);
 

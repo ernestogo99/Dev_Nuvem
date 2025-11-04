@@ -4,6 +4,8 @@ package com.example.demo.domain.model;
 import com.example.demo.domain.enums.LogActions;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
 
@@ -20,10 +22,13 @@ public class CrudLog {
     private Long id;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private LogActions action;
 
-    @Column(nullable = false)
-    private Candy data;
+
+    @Column(name = "candy_id")
+    private Long candyId;
+
 
     @Column(nullable = false)
     private Instant timeStamp;

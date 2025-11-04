@@ -4,8 +4,10 @@ package com.example.demo.domain.model;
 import com.example.demo.domain.enums.CandyType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -16,7 +18,6 @@ public class Candy {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.NONE)
     private Long id;
 
     @Column(nullable = false)
@@ -30,6 +31,12 @@ public class Candy {
 
     @Column(nullable = false)
     private CandyType type;
+
+   // @Column(nullable = false)
+    //private UUID imageId;
+
+    //@Transient
+    //private MultipartFile imageFile;
 
 
 }

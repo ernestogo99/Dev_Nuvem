@@ -4,7 +4,6 @@ package com.example.demo.services;
 import com.example.demo.domain.enums.CandyType;
 import com.example.demo.domain.enums.LogActions;
 import com.example.demo.domain.model.Candy;
-import com.example.demo.domain.model.CrudLog;
 import com.example.demo.exceptions.CandyNotFoundException;
 import com.example.demo.infra.repositories.CandyRepository;
 import com.example.demo.shared.dto.request.CandyRequestDTO;
@@ -30,13 +29,16 @@ public class CandyService {
     @Autowired
     private CandyMapper candyMapper;
 
+    @Autowired
+    private CrudLogMapper crudLogMapper;
+
 
 
 
     public CandyResponseDTO createCandy(CandyRequestDTO candyRequestDTO){
         Candy candy=this.candyMapper.toEntity(candyRequestDTO);
         Candy save=this.candyRepository.save(candy);
-        CrudLogRequestDTO crudLogRequestDTO= new CrudLogRequestDTO(LogActions.CREATE,candy,Instant.now());
+        CrudLogRequestDTO crudLogRequestDTO= new CrudLogRequestDTO(LogActions.CREATE,save.getId(),Instant.now());
         this.crudLogService.createLog(crudLogRequestDTO);
         return this.candyMapper.toResponseDTO(save);
     }
@@ -71,12 +73,14 @@ public class CandyService {
         return this.candyMapper.toResponseDTO(candy);
     }
 
-    public void deleteCandyById(Long id){
-        Candy candy=this.getCandy(id);
-        CrudLogRequestDTO crudLogRequestDTO=new CrudLogRequestDTO(LogActions.DELETE,candy,Instant.now());
+    public void deleteCandyById(Long id) {
+        CrudLogRequestDTO crudLogRequestDTO =
+                new CrudLogRequestDTO(LogActions.DELETE,id, Instant.now());
+
         this.crudLogService.createLog(crudLogRequestDTO);
-        this.candyRepository.delete(candy);
+        this.candyRepository.deleteById(id);
     }
+
 
     public CandyResponseDTO updateCandyById(Long id,CandyRequestDTO candyRequestDTO){
         Candy candy=this.getCandy(id);
@@ -86,7 +90,7 @@ public class CandyService {
         candy.setType(candyRequestDTO.type());
 
         Candy updated=this.candyRepository.save(candy);
-        CrudLogRequestDTO crudLogRequestDTO=new CrudLogRequestDTO(LogActions.UPDATE,updated,Instant.now());
+        CrudLogRequestDTO crudLogRequestDTO=new CrudLogRequestDTO(LogActions.UPDATE,updated.getId(),Instant.now());
         this.crudLogService.createLog(crudLogRequestDTO);
         return this.candyMapper.toResponseDTO(updated);
     }
