@@ -12,7 +12,9 @@ import com.example.demo.shared.dto.response.CandyResponseDTO;
 import com.example.demo.shared.mapper.CandyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,21 +32,36 @@ public class CandyService {
     @Autowired
     private CandyMapper candyMapper;
 
+  
 
-    public CandyResponseDTO createCandy(CandyRequestDTO candyRequestDTO){
-        Candy candy=this.candyMapper.toEntity(candyRequestDTO);
-        
-        Candy save=this.candyRepository.save(candy);
 
-        List<Map<String, String>> candiesList = new ArrayList<>();
+    @Autowired
+    private S3Service s3Service;
 
-        Map<String, String> candyMap = getMappedCandy(save);
-        candiesList.add(candyMap);
 
-        CrudLogRequestDTO crudLogRequestDTO= new CrudLogRequestDTO(LogActions.CREATE.toString(), candiesList, Instant.now().toString());
-        
-        this.crudLogService.createLog(crudLogRequestDTO);
-        return this.candyMapper.toResponseDTO(save);
+    public CandyResponseDTO createCandy(CandyRequestDTO candyRequestDTO, MultipartFile imageFile) {
+        try {
+            String imageKey = s3Service.uploadFile(imageFile);
+
+            Candy candy = this.candyMapper.toEntity(candyRequestDTO);
+            candy.setImageKey(imageKey);
+
+            Candy saved = this.candyRepository.save(candy);
+
+             List<Map<String, String>> candiesList = new ArrayList<>();
+
+            Map<String, String> candyMap = getMappedCandy(saved);
+            candiesList.add(candyMap);
+
+            CrudLogRequestDTO crudLogRequestDTO= new CrudLogRequestDTO(LogActions.CREATE.toString(), candiesList, Instant.now().toString());
+
+           
+            this.crudLogService.createLog(crudLogRequestDTO);
+
+            return this.candyMapper.toResponseDTO(saved);
+        } catch (IOException e) {
+            throw new RuntimeException("Error while uploading the image", e);
+        }
     }
 
     public List<CandyResponseDTO> getAllCandies(){

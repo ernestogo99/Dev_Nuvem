@@ -9,8 +9,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,18 +24,19 @@ public class CandyController {
 
     private final CandyService candyService;
 
-
-    @PostMapping
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE})
     @Operation(
             summary = "Create a new candy",
             description = "Creates a candy and also stores a log entry in DynamoDB"
     )
     public ResponseEntity<CandyResponseDTO> createCandy(
-            @RequestBody @Valid CandyRequestDTO candyRequestDTO
+            @RequestPart("candy") @Valid CandyRequestDTO candyRequestDTO,
+            @RequestPart("image") MultipartFile imageFile
     ) {
-        CandyResponseDTO response = candyService.createCandy(candyRequestDTO);
+        CandyResponseDTO response = candyService.createCandy(candyRequestDTO, imageFile);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
 
 
     @GetMapping

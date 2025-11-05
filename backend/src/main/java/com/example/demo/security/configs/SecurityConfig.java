@@ -43,11 +43,13 @@ public class SecurityConfig {
             .authorizeHttpRequests( auth -> auth
             // public endpoints
                 .requestMatchers(HttpMethod.POST, "api/auth/signup/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "api/auth/login/**").permitAll()
-                .requestMatchers("/swagger-ui/**").permitAll()
-                .requestMatchers("/swagger-ui.html").permitAll()
-                .requestMatchers("/v3/api-docs/**").permitAll()
-                .requestMatchers("/api-docs/**").permitAll()
+                    .requestMatchers(HttpMethod.POST, "api/auth/login/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "api-docs/**").permitAll()
+                                .requestMatchers(
+                                        "/v3/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html"
+                                ).permitAll()
             //private endpoints
                 .anyRequest().authenticated()
             ).authenticationManager(authenticationManager)

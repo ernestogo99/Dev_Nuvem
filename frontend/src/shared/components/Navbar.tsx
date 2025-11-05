@@ -9,6 +9,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import '@fontsource/federo/400.css';
+import NavigationMenu from './NavigationMenu';
 
 const Navbar: React.FC = () => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -26,7 +27,7 @@ const Navbar: React.FC = () => {
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{
-        vertical: 'bottom', // O menu aparecerá abaixo do ícone
+        vertical: 'bottom',
         horizontal: 'right',
       }}
       keepMounted
@@ -53,7 +54,7 @@ const Navbar: React.FC = () => {
                         component="a"
                         href="/"
                         sx={{
-                            mr: 2, // Margem direita para espaçamento
+                            mr: 2,
                             fontFamily: 'Federo',
                             fontSize: '1.5rem',
                             fontWeight: 700,
@@ -79,6 +80,9 @@ const Navbar: React.FC = () => {
                 </Container>
             </AppBar>
             {renderMenu}
+            <Box display="flex" justifyContent="center">
+                <NavigationMenu/>
+            </Box>
         </Box>
     )
 };

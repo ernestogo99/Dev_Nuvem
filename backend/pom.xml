@@ -31,6 +31,9 @@
 		<aws.java.sdk.version>2.37.4</aws.java.sdk.version>
 	</properties>
 	<dependencyManagement>
+
+	</dependencyManagement>
+	<dependencies>
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>bom</artifactId>
@@ -38,8 +41,6 @@
 			<type>pom</type>
 			<scope>import</scope>
 		</dependency>
-	</dependencyManagement>
-	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -66,6 +67,11 @@
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
 			<version>1.5.5.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>s3</artifactId>
+			<version>2.37.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
