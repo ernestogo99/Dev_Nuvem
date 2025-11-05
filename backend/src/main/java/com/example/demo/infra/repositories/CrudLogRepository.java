@@ -66,8 +66,10 @@ public class CrudLogRepository {
     public CrudLog saveLog(CrudLog log){
         try{
            logTable.putItem(log);
+           
         } catch(Exception e){
             System.err.println(("Failed to save log to DynamoDB: " + e.getMessage()));
+            throw e;
         } 
         return log;
     }

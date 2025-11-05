@@ -1,16 +1,10 @@
 package com.example.demo.domain.model;
 
 
-import com.example.demo.domain.enums.LogActions;
-import jakarta.persistence.*;
-import lombok.*;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey;
-
-import java.rmi.server.UID;
-import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
