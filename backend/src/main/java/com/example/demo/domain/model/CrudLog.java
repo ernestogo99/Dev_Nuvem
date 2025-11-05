@@ -1,37 +1,68 @@
 package com.example.demo.domain.model;
 
 
-import com.example.demo.domain.enums.LogActions;
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
-import java.time.Instant;
 
-@Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
+@DynamoDbBean
 public class CrudLog {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.NONE)
-    private Long id;
+    private UUID id;   
+    private String actionType;
+    private List<Map<String, String>> candies;
+    private String timestamp;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private LogActions action;
+     public CrudLog(String actionType, String timestamp, List<Map<String, String>> candies) {
+        this.id = UUID.randomUUID();
+        this.actionType = actionType;
+        this.timestamp = timestamp;
+        this.candies = candies;
+    }
+
+    public CrudLog() {}
 
 
-    @Column(name = "candy_id")
-    private Long candyId;
+    @DynamoDbPartitionKey
+    public String getActionType(){
+        return this.actionType;
+    }
 
+    public void setActionType(String actionType) {
+        this.actionType = actionType;
+    }
 
-    @Column(nullable = false)
-    private Instant timeStamp;
+    @DynamoDbSortKey
+    public String getTimestamp(){
+        return this.timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    @DynamoDbAttribute("id")
+    public UUID getId() {
+        return id;
+    }
+ 
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    @DynamoDbAttribute("candies")
+    public List<Map<String, String>> getCandies() {
+        return candies;
+    }
+
+    public void setCandies(List<Map<String, String>> candies) {
+        this.candies = candies;
+    }
 
 
 

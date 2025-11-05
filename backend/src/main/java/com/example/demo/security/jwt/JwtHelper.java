@@ -4,47 +4,54 @@ import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
-
+import org.springframework.stereotype.Component;
 import com.example.demo.exceptions.AccessDeniedException;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
+@Component
 public class JwtHelper {
 
-    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    @Value("${security.jwt.secret}")
+    private String jwtSecret;
+
     private static final int MINUTES = 120;
 
-    public static String generateToken(String email, String fullName){
+    private Key getSignKey(){
+        byte[] keyBytes = Decoders.BASE64.decode(this.jwtSecret);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public String generateToken(String email, String fullName){
         var now = Instant.now();
         return Jwts.builder()
             .setSubject(email)
             .claim("fullName", fullName)
             .setIssuedAt(Date.from(now))
             .setExpiration(Date.from(now.plus(MINUTES, ChronoUnit.MINUTES)))
-            .signWith(SECRET_KEY)
+            .signWith(getSignKey())
             .compact();
     }
 
-    public static String extractUsername(String token){
+    public String extractUsername(String token){
         return getTokenBody(token).getSubject();
     }
 
-    public static Boolean validateToken(String token, UserDetails userDetails){
+    public Boolean validateToken(String token, UserDetails userDetails){
         final String username = extractUsername(token);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
-    private static Claims getTokenBody(String token){
+    private Claims getTokenBody(String token){
           try{
             return Jwts
                 .parserBuilder()
-                .setSigningKey(SECRET_KEY)
+                .setSigningKey(getSignKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
@@ -53,7 +60,7 @@ public class JwtHelper {
         }
     }
 
-    private static boolean isTokenExpired(String token){
+    private boolean isTokenExpired(String token){
         Claims claims = getTokenBody(token);
         return claims.getExpiration().before(new Date());
     }

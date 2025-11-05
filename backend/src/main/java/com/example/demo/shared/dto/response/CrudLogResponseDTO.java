@@ -1,14 +1,14 @@
 package com.example.demo.shared.dto.response;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
-import com.example.demo.domain.enums.LogActions;
 import com.example.demo.domain.model.Candy;
 
-import java.time.Instant;
-
 public record CrudLogResponseDTO(
-        Long id,
-        LogActions action,
-        Long candyId,
-        Instant timeStamp
+        UUID id,
+        String actionType,
+        List<Map<String, String>> candies,
+        String timestamp
 ) {
 }
