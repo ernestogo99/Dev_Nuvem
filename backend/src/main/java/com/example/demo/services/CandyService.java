@@ -10,7 +10,6 @@ import com.example.demo.shared.dto.request.CandyRequestDTO;
 import com.example.demo.shared.dto.request.CrudLogRequestDTO;
 import com.example.demo.shared.dto.response.CandyResponseDTO;
 import com.example.demo.shared.mapper.CandyMapper;
-import com.example.demo.shared.mapper.CrudLogMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,16 +28,14 @@ public class CandyService {
     @Autowired
     private CandyMapper candyMapper;
 
-    @Autowired
-    private CrudLogMapper crudLogMapper;
-
-
-
 
     public CandyResponseDTO createCandy(CandyRequestDTO candyRequestDTO){
         Candy candy=this.candyMapper.toEntity(candyRequestDTO);
+        
         Candy save=this.candyRepository.save(candy);
-        CrudLogRequestDTO crudLogRequestDTO= new CrudLogRequestDTO(LogActions.CREATE,save.getId(),Instant.now());
+
+        CrudLogRequestDTO crudLogRequestDTO= new CrudLogRequestDTO(LogActions.CREATE.toString(),save.getId(),Instant.now().toString());
+        
         this.crudLogService.createLog(crudLogRequestDTO);
         return this.candyMapper.toResponseDTO(save);
     }
@@ -75,7 +72,7 @@ public class CandyService {
 
     public void deleteCandyById(Long id) {
         CrudLogRequestDTO crudLogRequestDTO =
-                new CrudLogRequestDTO(LogActions.DELETE,id, Instant.now());
+                new CrudLogRequestDTO(LogActions.DELETE.toString(),id, Instant.now().toString());
 
         this.crudLogService.createLog(crudLogRequestDTO);
         this.candyRepository.deleteById(id);
@@ -90,7 +87,7 @@ public class CandyService {
         candy.setType(candyRequestDTO.type());
 
         Candy updated=this.candyRepository.save(candy);
-        CrudLogRequestDTO crudLogRequestDTO=new CrudLogRequestDTO(LogActions.UPDATE,updated.getId(),Instant.now());
+        CrudLogRequestDTO crudLogRequestDTO=new CrudLogRequestDTO(LogActions.UPDATE.toString(), updated.getId(), Instant.now().toString());
         this.crudLogService.createLog(crudLogRequestDTO);
         return this.candyMapper.toResponseDTO(updated);
     }

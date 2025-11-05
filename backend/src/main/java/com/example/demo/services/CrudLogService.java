@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.domain.enums.LogActions;
 import com.example.demo.domain.model.CrudLog;
 import com.example.demo.infra.repositories.CrudLogRepository;
 import com.example.demo.shared.dto.request.CrudLogRequestDTO;
@@ -21,12 +22,17 @@ public class CrudLogService {
 
 
     public CrudLogResponseDTO createLog(CrudLogRequestDTO requestDTO){
-        CrudLog log= this.mapper.toEntity(requestDTO);
-        CrudLog save=this.crudLogRepository.save(log);
+        CrudLog log = new CrudLog(requestDTO.actionType(), requestDTO.timestamp(), requestDTO.candyId());
+        CrudLog save = this.crudLogRepository.saveLog(log);
         return this.mapper.toResponseDTO(save);
     }
 
     public List<CrudLogResponseDTO> getAllLogs(){
-        return this.mapper.toListResponseDTO(this.crudLogRepository.findAll());
+        return this.mapper.toListResponseDTO(this.crudLogRepository.getAllLogs());
+    }
+
+    public List<CrudLogResponseDTO> getLogsByTimeStamp(LogActions actionType, String startTime, String endTime){
+        return this.mapper.toListResponseDTO(this.crudLogRepository
+            .getLogsByTimeRange(actionType, startTime, endTime));
     }
 }

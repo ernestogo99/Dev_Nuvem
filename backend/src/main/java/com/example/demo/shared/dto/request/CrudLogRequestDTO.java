@@ -8,8 +8,8 @@ import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
 
 public record CrudLogRequestDTO(
-        @NotNull LogActions action,
+        @NotNull String actionType,
         @Min(0) Long candyId,
-        @NotNull Instant timeStamp
+        @NotNull String timestamp
         ) {
 }

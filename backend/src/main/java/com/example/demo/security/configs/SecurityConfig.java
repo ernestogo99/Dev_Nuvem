@@ -44,7 +44,10 @@ public class SecurityConfig {
             // public endpoints
                 .requestMatchers(HttpMethod.POST, "api/auth/signup/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "api/auth/login/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "api-docs/**").permitAll()
+                .requestMatchers("/swagger-ui/**").permitAll()
+                .requestMatchers("/swagger-ui.html").permitAll()
+                .requestMatchers("/v3/api-docs/**").permitAll()
+                .requestMatchers("/api-docs/**").permitAll()
             //private endpoints
                 .anyRequest().authenticated()
             ).authenticationManager(authenticationManager)

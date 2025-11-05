@@ -4,34 +4,69 @@ package com.example.demo.domain.model;
 import com.example.demo.domain.enums.LogActions;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey;
 
+import java.rmi.server.UID;
 import java.time.Instant;
+import java.util.UUID;
 
-@Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
+
+@DynamoDbBean
 public class CrudLog {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.NONE)
-    private Long id;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private LogActions action;
-
-
-    @Column(name = "candy_id")
+    private UUID id;   
+    private String actionType;
     private Long candyId;
+    private String timestamp;
+
+     public CrudLog(String actionType, String timestamp, Long candyId) {
+        this.id = UUID.randomUUID();
+        this.actionType = actionType;
+        this.timestamp = timestamp;
+        this.candyId = candyId;
+    }
+
+    public CrudLog() {}
 
 
-    @Column(nullable = false)
-    private Instant timeStamp;
+    @DynamoDbPartitionKey
+    public String getActionType(){
+        return this.actionType;
+    }
+
+    public void setActionType(String actionType) {
+        this.actionType = actionType;
+    }
+
+    @DynamoDbSortKey
+    public String getTimestamp(){
+        return this.timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    @DynamoDbAttribute("id")
+    public UUID getId() {
+        return id;
+    }
+ 
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    @DynamoDbAttribute("candy_id")
+    public Long getCandyId() {
+        return candyId;
+    }
+
+    public void setCandyId(Long candyId) {
+        this.candyId = candyId;
+    }
 
 
 

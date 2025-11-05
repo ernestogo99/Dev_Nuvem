@@ -4,11 +4,12 @@ import com.example.demo.domain.enums.LogActions;
 import com.example.demo.domain.model.Candy;
 
 import java.time.Instant;
+import java.util.UUID;
 
 public record CrudLogResponseDTO(
-        Long id,
-        LogActions action,
+        UUID id,
+        String actionType,
         Long candyId,
-        Instant timeStamp
+        String timestamp
 ) {
 }
