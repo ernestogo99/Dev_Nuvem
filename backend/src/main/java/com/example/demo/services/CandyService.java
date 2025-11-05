@@ -38,6 +38,7 @@ public class CandyService {
     @Autowired
     private S3Service s3Service;
 
+   
 
     public CandyResponseDTO createCandy(CandyRequestDTO candyRequestDTO, MultipartFile imageFile) {
         try {
