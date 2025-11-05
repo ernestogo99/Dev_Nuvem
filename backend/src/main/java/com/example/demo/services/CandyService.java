@@ -13,7 +13,9 @@ import com.example.demo.shared.mapper.CandyMapper;
 import com.example.demo.shared.mapper.CrudLogMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
 
@@ -32,15 +34,28 @@ public class CandyService {
     @Autowired
     private CrudLogMapper crudLogMapper;
 
+    @Autowired
+    private S3Service s3Service;
 
 
 
-    public CandyResponseDTO createCandy(CandyRequestDTO candyRequestDTO){
-        Candy candy=this.candyMapper.toEntity(candyRequestDTO);
-        Candy save=this.candyRepository.save(candy);
-        CrudLogRequestDTO crudLogRequestDTO= new CrudLogRequestDTO(LogActions.CREATE,save.getId(),Instant.now());
-        this.crudLogService.createLog(crudLogRequestDTO);
-        return this.candyMapper.toResponseDTO(save);
+
+    public CandyResponseDTO createCandy(CandyRequestDTO candyRequestDTO, MultipartFile imageFile) {
+        try {
+            String imageKey = s3Service.uploadFile(imageFile);
+
+            Candy candy = this.candyMapper.toEntity(candyRequestDTO);
+            candy.setImageKey(imageKey);
+
+            Candy saved = this.candyRepository.save(candy);
+
+            CrudLogRequestDTO crudLogRequestDTO = new CrudLogRequestDTO(LogActions.CREATE, saved.getId(), Instant.now());
+            this.crudLogService.createLog(crudLogRequestDTO);
+
+            return this.candyMapper.toResponseDTO(saved);
+        } catch (IOException e) {
+            throw new RuntimeException("Error while uploading the image", e);
+        }
     }
 
     public List<CandyResponseDTO> getAllCandies(){

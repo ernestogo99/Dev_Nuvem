@@ -32,11 +32,11 @@ public class Candy {
     @Column(nullable = false)
     private CandyType type;
 
-   // @Column(nullable = false)
-    //private UUID imageId;
+    @Column(nullable = false)
+    private String imageKey;
 
-    //@Transient
-    //private MultipartFile imageFile;
+    @Transient
+    private MultipartFile imageFile;
 
 
 }
