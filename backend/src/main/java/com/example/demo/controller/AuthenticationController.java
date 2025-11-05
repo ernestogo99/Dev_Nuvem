@@ -31,11 +31,13 @@ public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
     private final LoginService loginService;
+    private final JwtHelper jwtHelper;
 
-    public AuthenticationController(AuthenticationManager authenticationManager, UserService userService, LoginService loginService) {
+    public AuthenticationController(AuthenticationManager authenticationManager, UserService userService, LoginService loginService, JwtHelper jwtHelper) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.loginService = loginService;
+        this.jwtHelper = jwtHelper;
     }
 
 
@@ -63,7 +65,7 @@ public class AuthenticationController {
         Optional<String> fullName = userService.getFullNameFromUser(loginRequest.email());
 
         if(fullName.isPresent()){
-          String token = JwtHelper.generateToken(loginRequest.email(), fullName.get());  
+          String token = jwtHelper.generateToken(loginRequest.email(), fullName.get());  
           loginService.addLoginAttempt(loginRequest.email(), true);
           return ResponseEntity.ok(new LoginResponse(loginRequest.email(), token));
         }
