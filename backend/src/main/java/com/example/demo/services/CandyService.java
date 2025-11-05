@@ -14,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CandyService {
@@ -28,52 +30,169 @@ public class CandyService {
     @Autowired
     private CandyMapper candyMapper;
 
+    private List<Map<String, String>> candiesList;
 
     public CandyResponseDTO createCandy(CandyRequestDTO candyRequestDTO){
         Candy candy=this.candyMapper.toEntity(candyRequestDTO);
         
         Candy save=this.candyRepository.save(candy);
 
-        CrudLogRequestDTO crudLogRequestDTO= new CrudLogRequestDTO(LogActions.CREATE.toString(),save.getId(),Instant.now().toString());
+        candiesList = new ArrayList<>();
+
+        Map<String, String> candyMap =  Map.of(
+             "id", save.getId().toString(),
+            "name", save.getName().toString(),
+            "price", save.getPrice().toString()
+        );
+
+        candiesList.add(candyMap);
+
+        CrudLogRequestDTO crudLogRequestDTO= new CrudLogRequestDTO(LogActions.CREATE.toString(), candiesList, Instant.now().toString());
         
         this.crudLogService.createLog(crudLogRequestDTO);
         return this.candyMapper.toResponseDTO(save);
     }
 
     public List<CandyResponseDTO> getAllCandies(){
-        return this.candyMapper.toListResponseDTO(this.candyRepository.findAll());
+        List<Candy> candies = this.candyRepository.findAll();
+
+        candiesList = new ArrayList<>();
+  
+        candies.forEach( candy ->{
+            candiesList.add(
+                Map.of(
+                "id", candy.getId().toString(),
+                "name", candy.getName().toString(),
+                "price", candy.getPrice().toString()
+                )
+            );
+        });
+        CrudLogRequestDTO crudLogRequestDTO= new CrudLogRequestDTO(LogActions.READ.toString(), candiesList, Instant.now().toString());
+        this.crudLogService.createLog(crudLogRequestDTO);
+
+        return this.candyMapper.toListResponseDTO(candies);
     }
 
     public List<CandyResponseDTO> getAllCakes(){
-        List<Candy> cakes=this.candyRepository.findByType(CandyType.CAKE);
-        return this.candyMapper.toListResponseDTO(cakes);
+        List<Candy> candies=this.candyRepository.findByType(CandyType.CAKE);
+
+        candiesList = new ArrayList<>();
+        
+        candies.forEach( candy ->{
+            candiesList.add(
+                Map.of(
+                "id", candy.getId().toString(),
+                "name", candy.getName().toString(),
+                "price", candy.getPrice().toString()
+                )
+            );
+        });
+
+        CrudLogRequestDTO crudLogRequestDTO= new CrudLogRequestDTO(LogActions.READ.toString(), candiesList, Instant.now().toString());
+        this.crudLogService.createLog(crudLogRequestDTO);
+
+        return this.candyMapper.toListResponseDTO(candies);
     }
 
     public List<CandyResponseDTO> getAllDocinhos(){
-        List<Candy> cakes=this.candyRepository.findByType(CandyType.DOCINHO);
-        return this.candyMapper.toListResponseDTO(cakes);
+        List<Candy> candies=this.candyRepository.findByType(CandyType.DOCINHO);
+        candiesList = new ArrayList<>();
+        
+        candies.forEach( candy ->{
+            candiesList.add(
+                Map.of(
+                "id", candy.getId().toString(),
+                "name", candy.getName().toString(),
+                "price", candy.getPrice().toString()
+                )
+            );
+        });
+
+
+        CrudLogRequestDTO crudLogRequestDTO= new CrudLogRequestDTO(LogActions.READ.toString(), candiesList, Instant.now().toString());
+        this.crudLogService.createLog(crudLogRequestDTO);
+
+        return this.candyMapper.toListResponseDTO(candies);
     }
 
     public List<CandyResponseDTO> getAllMuffins(){
-        List<Candy> cakes=this.candyRepository.findByType(CandyType.MUFFIN);
-        return this.candyMapper.toListResponseDTO(cakes);
+        List<Candy> candies = this.candyRepository.findByType(CandyType.MUFFIN);
+        candiesList = new ArrayList<>();
+        
+        candies.forEach( candy ->{
+            candiesList.add(
+                Map.of(
+                "id", candy.getId().toString(),
+                "name", candy.getName().toString(),
+                "price", candy.getPrice().toString()
+                )
+            );
+        });
+
+
+        CrudLogRequestDTO crudLogRequestDTO= new CrudLogRequestDTO(LogActions.READ.toString(), candiesList, Instant.now().toString());
+        this.crudLogService.createLog(crudLogRequestDTO);
+
+        return this.candyMapper.toListResponseDTO(candies);
     }
 
     public List<CandyResponseDTO> getAllBrownies(){
-        List<Candy> cakes=this.candyRepository.findByType(CandyType.BROWNIE);
-        return this.candyMapper.toListResponseDTO(cakes);
+        List<Candy> candies=this.candyRepository.findByType(CandyType.BROWNIE);
+
+        candiesList = new ArrayList<>();
+        
+         candies.forEach( candy ->{
+            candiesList.add(
+                Map.of(
+                "id", candy.getId().toString(),
+                "name", candy.getName().toString(),
+                "price", candy.getPrice().toString()
+                )
+            );
+        });
+
+
+        CrudLogRequestDTO crudLogRequestDTO= new CrudLogRequestDTO(LogActions.READ.toString(), candiesList, Instant.now().toString());
+        this.crudLogService.createLog(crudLogRequestDTO);
+
+        return this.candyMapper.toListResponseDTO(candies);
     }
 
 
     public CandyResponseDTO getCandyById(Long id){
         Candy candy=this.getCandy(id);
+
+        candiesList = new ArrayList<>();
+
+        
+        candiesList.add(
+            Map.of(
+            "id", candy.getId().toString(),
+            "name", candy.getName().toString(),
+            "price", candy.getPrice().toString()
+            )
+        );
+      
+        CrudLogRequestDTO crudLogRequestDTO= new CrudLogRequestDTO(LogActions.READ.toString(), candiesList, Instant.now().toString());
+        this.crudLogService.createLog(crudLogRequestDTO);
+
         return this.candyMapper.toResponseDTO(candy);
     }
 
     public void deleteCandyById(Long id) {
-        CrudLogRequestDTO crudLogRequestDTO =
-                new CrudLogRequestDTO(LogActions.DELETE.toString(),id, Instant.now().toString());
+        candiesList = new ArrayList<>();
+        Candy candy=this.getCandy(id);
 
+        candiesList.add(
+            Map.of(
+            "id", candy.getId().toString(),
+            "name", candy.getName().toString(),
+            "price", candy.getPrice().toString()
+            )
+        );
+
+        CrudLogRequestDTO crudLogRequestDTO= new CrudLogRequestDTO(LogActions.DELETE.toString(), candiesList, Instant.now().toString());
+     
         this.crudLogService.createLog(crudLogRequestDTO);
         this.candyRepository.deleteById(id);
     }
@@ -87,7 +206,17 @@ public class CandyService {
         candy.setType(candyRequestDTO.type());
 
         Candy updated=this.candyRepository.save(candy);
-        CrudLogRequestDTO crudLogRequestDTO=new CrudLogRequestDTO(LogActions.UPDATE.toString(), updated.getId(), Instant.now().toString());
+
+        candiesList = new ArrayList<>();
+
+        candiesList.add(
+            Map.of(
+            "id", updated.getId().toString(),
+            "name", updated.getName().toString(),
+            "price", updated.getPrice().toString()
+            )
+        );
+        CrudLogRequestDTO crudLogRequestDTO = new CrudLogRequestDTO(LogActions.UPDATE.toString(), candiesList, Instant.now().toString());
         this.crudLogService.createLog(crudLogRequestDTO);
         return this.candyMapper.toResponseDTO(updated);
     }

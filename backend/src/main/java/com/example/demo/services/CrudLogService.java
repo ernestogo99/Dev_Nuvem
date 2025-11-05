@@ -22,7 +22,7 @@ public class CrudLogService {
 
 
     public CrudLogResponseDTO createLog(CrudLogRequestDTO requestDTO){
-        CrudLog log = new CrudLog(requestDTO.actionType(), requestDTO.timestamp(), requestDTO.candyId());
+        CrudLog log = new CrudLog(requestDTO.actionType(), requestDTO.timestamp(), requestDTO.candies());
         CrudLog save = this.crudLogRepository.saveLog(log);
         return this.mapper.toResponseDTO(save);
     }

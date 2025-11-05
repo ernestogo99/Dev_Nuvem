@@ -21,8 +21,15 @@ public class CrudLogRepository {
     private final DynamoDbTable<CrudLog> logTable;
 
     public CrudLogRepository(DynamoDbEnhancedClient dynamoDbEnhancedClient){
-        this.logTable = dynamoDbEnhancedClient.table("pretty-cake-logs", 
-            TableSchema.fromBean(CrudLog.class));          
+        try{
+            this.logTable = dynamoDbEnhancedClient.table("pretty-cake-logs", 
+            TableSchema.fromBean(CrudLog.class));   
+        } catch( Exception e){
+            System.err.println("Failed to create log repository: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+               
     }
 
     public CompletableFuture<Void> saveLogAsync(CrudLog log){

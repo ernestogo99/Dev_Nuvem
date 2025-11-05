@@ -11,6 +11,8 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortK
 
 import java.rmi.server.UID;
 import java.time.Instant;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -19,14 +21,14 @@ public class CrudLog {
 
     private UUID id;   
     private String actionType;
-    private Long candyId;
+    private List<Map<String, String>> candies;
     private String timestamp;
 
-     public CrudLog(String actionType, String timestamp, Long candyId) {
+     public CrudLog(String actionType, String timestamp, List<Map<String, String>> candies) {
         this.id = UUID.randomUUID();
         this.actionType = actionType;
         this.timestamp = timestamp;
-        this.candyId = candyId;
+        this.candies = candies;
     }
 
     public CrudLog() {}
@@ -59,13 +61,13 @@ public class CrudLog {
         this.id = id;
     }
 
-    @DynamoDbAttribute("candy_id")
-    public Long getCandyId() {
-        return candyId;
+    @DynamoDbAttribute("candies")
+    public List<Map<String, String>> getCandies() {
+        return candies;
     }
 
-    public void setCandyId(Long candyId) {
-        this.candyId = candyId;
+    public void setCandies(List<Map<String, String>> candies) {
+        this.candies = candies;
     }
 
 
