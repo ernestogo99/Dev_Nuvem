@@ -5,6 +5,7 @@ import com.example.demo.domain.enums.CandyType;
 import com.example.demo.domain.enums.LogActions;
 import com.example.demo.domain.model.Candy;
 import com.example.demo.exceptions.CandyNotFoundException;
+import com.example.demo.infra.aws.s3.S3Service;
 import com.example.demo.infra.repositories.CandyRepository;
 import com.example.demo.shared.dto.request.CandyRequestDTO;
 import com.example.demo.shared.dto.request.CrudLogRequestDTO;
@@ -32,13 +33,11 @@ public class CandyService {
     @Autowired
     private CandyMapper candyMapper;
 
-  
-
 
     @Autowired
     private S3Service s3Service;
 
-   
+ 
 
     public CandyResponseDTO createCandy(CandyRequestDTO candyRequestDTO, MultipartFile imageFile) {
         try {
