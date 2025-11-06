@@ -1,81 +1,78 @@
 package com.example.demo.controller;
 
-import java.util.Optional;
-import org.springframework.http.HttpStatus;
+import com.example.demo.dto.auth.*;
+import com.example.demo.model.User;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.security.jwt.JwtUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.exceptions.BadRequestException;
-import com.example.demo.exceptions.NotFoundException;
-import com.example.demo.security.jwt.JwtHelper;
-import com.example.demo.services.LoginService;
-import com.example.demo.services.UserService;
-import com.example.demo.shared.dto.request.SignupRequest;
-import com.example.demo.shared.dto.response.LoginResponse;
-import com.example.demo.shared.dto.request.LoginRequest;
-import org.springframework.web.bind.annotation.RequestBody;
-import jakarta.validation.Valid;
-
-
-
+@CrossOrigin(origins = "*", maxAge = 3600) 
 @RestController
 @RequestMapping("/api/auth")
-public class AuthenticationController {
+public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-    private final UserService userService;
-    private final LoginService loginService;
-    private final JwtHelper jwtHelper;
+    @Autowired
+    AuthenticationManager authenticationManager; 
 
-    public AuthenticationController(AuthenticationManager authenticationManager, UserService userService, LoginService loginService, JwtHelper jwtHelper) {
-        this.authenticationManager = authenticationManager;
-        this.userService = userService;
-        this.loginService = loginService;
-        this.jwtHelper = jwtHelper;
-    }
+    @Autowired
+    JwtUtils jwtUtils; 
+    
+    @Autowired 
+    UserRepository userRepository; 
 
+    @Autowired
+    PasswordEncoder encoder; 
 
-    @PostMapping("/signup")
-    public ResponseEntity<Void> signup(@Valid @RequestBody SignupRequest requestDto, BindingResult bindingResult) throws BadRequestException{
-        if(bindingResult.hasErrors()){
-            throw new BadRequestException("Register failed. Please ensure that your credentials are correct and that all required fields are filled out properly.", bindingResult);
-        }
-        userService.signup(requestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    @PostMapping(value = "/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest, BindingResult bindingResult) throws BadRequestException{
-        if (bindingResult.hasErrors()) {
-            throw new BadRequestException("Login failed. Please ensure that your credentials are correct and that all required fields are filled out properly.", bindingResult);
-        }
-        try{
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.password()));        
-        } catch( BadCredentialsException e){
-            loginService.addLoginAttempt(loginRequest.email(), false);
-            throw e;
-        }
-
-        Optional<String> fullName = userService.getFullNameFromUser(loginRequest.email());
-
-        if(fullName.isPresent()){
-          String token = jwtHelper.generateToken(loginRequest.email(), fullName.get());  
-          loginService.addLoginAttempt(loginRequest.email(), true);
-          return ResponseEntity.ok(new LoginResponse(loginRequest.email(), token));
-        }
-        else{
-            loginService.addLoginAttempt(loginRequest.email(), false);
-            throw new NotFoundException("User not found.");
-        }
-
+    // === REGISTRATION ENDPOINT ===
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest signUpRequest) {
         
+        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email is already in use!"));
+        }
+
+        User user = new User();
+        user.setEmail(signUpRequest.getEmail());
+        
+        String hashedPassword = encoder.encode(signUpRequest.getPassword());
+        user.setPassword(hashedPassword);
+        
+        userRepository.save(user);
+
+        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
 
+    // === LOGIN ENDPOINT ===
+    @PostMapping("/login")
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+        
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
+            );
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+            String jwt = jwtUtils.generateJwtToken(userDetails);
+
+            return ResponseEntity.ok(new JwtResponse(jwt));
+
+        } catch (Exception e) {
+            return ResponseEntity
+                .status(401) 
+                .body("Error: Invalid email or password.");
+        }
+    }
 }
