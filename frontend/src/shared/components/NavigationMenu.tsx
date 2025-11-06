@@ -1,35 +1,53 @@
-import { Box, Button } from '@mui/material';
-import * as React from 'react';
+import { Box, Button } from "@mui/material";
+import * as React from "react";
 
-const NavigationMenu: React.FC = () => {
-    return (
-        <Box
-          mt={3}
-          sx={{
-            display: { xs: 'none', sm: 'flex' },
-            gap: 4,
-            alignItems: 'center',
-            '& .MuiButton-root': {
-              '&:hover': {
-                backgroundColor: 'transparent',
-              },
-            },
-          }}
-        >
-            <Button color="inherit" href="#cakes" sx={{ fontWeight: 400 }}>
-                CAKES
-            </Button>
-            <Button color="inherit" href="#muffins" sx={{ fontWeight: 400 }}>
-                MUFFINS
-            </Button>
-            <Button color="inherit" href="#brownies" sx={{ fontWeight: 400 }}>
-                BROWNIES
-            </Button>
-            <Button color="inherit" href="#docinhos" sx={{ fontWeight: 400 }}>
-                DOCINHOS
-            </Button>
-        </Box>
-    )
+interface NavigationMenuProps {
+  sections: {
+    cakesRef: React.RefObject<HTMLDivElement | null>;
+    muffinsRef: React.RefObject<HTMLDivElement | null>;
+    browniesRef: React.RefObject<HTMLDivElement | null>;
+    docinhosRef: React.RefObject<HTMLDivElement | null>;
+  };
+}
+
+const NavigationMenu: React.FC<NavigationMenuProps> = ({ sections }) => {
+  const handleScroll = (ref: React.RefObject<HTMLDivElement | null>) => {
+    const navbarHeight = 64;
+    if (ref.current) {
+      const top = ref.current.offsetTop - navbarHeight;
+      window.scrollTo({ top, behavior: "smooth" });
+    }
+  };
+
+  return (
+    <Box
+      mt={2}
+      sx={{
+        display: { xs: "none", sm: "flex" },
+        gap: 4,
+        alignItems: "center",
+      }}
+    >
+      <Button color="inherit" onClick={() => handleScroll(sections.cakesRef)}>
+        CAKES
+      </Button>
+      <Button color="inherit" onClick={() => handleScroll(sections.muffinsRef)}>
+        MUFFINS
+      </Button>
+      <Button
+        color="inherit"
+        onClick={() => handleScroll(sections.browniesRef)}
+      >
+        BROWNIES
+      </Button>
+      <Button
+        color="inherit"
+        onClick={() => handleScroll(sections.docinhosRef)}
+      >
+        DOCINHOS
+      </Button>
+    </Box>
+  );
 };
 
 export default NavigationMenu;
