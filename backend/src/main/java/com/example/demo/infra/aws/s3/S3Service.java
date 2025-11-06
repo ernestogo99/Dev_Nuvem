@@ -1,4 +1,4 @@
-package com.example.demo.services;
+package com.example.demo.infra.aws.s3;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
