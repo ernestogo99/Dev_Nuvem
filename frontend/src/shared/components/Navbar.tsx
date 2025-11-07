@@ -10,7 +10,7 @@ import MenuItem from "@mui/material/MenuItem";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import "@fontsource/federo/400.css";
 import NavigationMenu from "./NavigationMenu";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 interface InavbarProps {
   sections: {
@@ -24,12 +24,14 @@ interface InavbarProps {
 const Navbar: React.FC<InavbarProps> = ({ sections }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const isMenuOpen = Boolean(anchorEl);
+  const navigate = useNavigate();
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleMenuClose = () => {
+    navigate("/login");
     setAnchorEl(null);
   };
 

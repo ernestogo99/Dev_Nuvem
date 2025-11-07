@@ -74,7 +74,7 @@ export const Docinhos = React.forwardRef<HTMLDivElement>((props, ref) => {
       >
         Docinhos
       </Typography>
-      <ProductList text="Add a new docinho" products={mockCandies} />
+      <ProductList text="new candy" products={mockCandies} />
       <Box textAlign="center" mt={10}>
         <img src={bigode} />
       </Box>

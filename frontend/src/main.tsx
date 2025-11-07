@@ -6,13 +6,16 @@ import React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import customTheme from "./theme";
 import { AuthContextProvider } from "./shared/contexts/authcontext.tsx";
+import { DialogContextProvider } from "./shared/contexts/createcandydialogcontext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ThemeProvider theme={customTheme}>
       <AuthContextProvider>
-        <CssBaseline />
-        <App />
+        <DialogContextProvider>
+          <CssBaseline />
+          <App />
+        </DialogContextProvider>
       </AuthContextProvider>
     </ThemeProvider>
   </React.StrictMode>

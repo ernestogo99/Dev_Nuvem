@@ -17,11 +17,10 @@ export const ProductList: React.FC<IproductListProps> = ({
   onDelete,
   onEdit,
   text,
-  onClick,
 }) => {
   return (
     <Box mt={4}>
-      <Grid gap={4} container justifyContent="center">
+      <Grid gap={7} container justifyContent="center">
         {products.map((product) => (
           <Grid
             key={product.id}
@@ -33,7 +32,7 @@ export const ProductList: React.FC<IproductListProps> = ({
             <ProductCard candy={product} onEdit={onEdit} onDelete={onDelete} />
           </Grid>
         ))}
-        <AddproductCard text={text!} onClick={onClick!}></AddproductCard>
+        <AddproductCard text={text!}></AddproductCard>
       </Grid>
     </Box>
   );

@@ -5,6 +5,7 @@ import { Docinhos } from "../docinhos/docinhos";
 import { Cake } from "../cake/cake";
 import { Brownies } from "../brownies/brownies";
 import { Muffins } from "../muffins/muffins";
+import { CreateCandy } from "../createcandy/createcandy";
 
 export const Home = () => {
   const cakesRef = useRef<HTMLDivElement>(null);
@@ -20,6 +21,7 @@ export const Home = () => {
       <Brownies ref={browniesRef}></Brownies>
       <Muffins ref={muffinsRef}></Muffins>
       <Docinhos ref={docinhosRef}></Docinhos>
+      <CreateCandy></CreateCandy>
     </Box>
   );
 };

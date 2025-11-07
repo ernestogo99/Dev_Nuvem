@@ -17,26 +17,64 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   const { isLogged } = useAuthContext();
   return (
-    <Card
-      sx={{
-        width: 180,
-        borderRadius: 3,
-        backgroundColor: "#FFD98E",
-        position: "relative",
-        textAlign: "center",
-        paddingTop: 2,
-      }}
-    >
-      {isLogged && (
+    <Box display="flex">
+      <Card
+        sx={{
+          width: 180,
+          borderRadius: 3,
+          backgroundColor: "#FFD98E",
+          position: "relative",
+          textAlign: "center",
+          paddingTop: 2,
+        }}
+      >
         <Box
           sx={{
-            position: "absolute",
-            top: 8,
-            right: 8,
+            width: 100,
+            height: 100,
+            borderRadius: "50%",
+            backgroundColor: "#d9d9d9",
+            margin: "0 auto",
             display: "flex",
-            gap: 1,
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
+          {candy.imageKey ? (
+            <img
+              src={candy.imageKey?.toString()}
+              alt={candy.name}
+              style={{
+                width: "100%",
+                height: "100%",
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
+            />
+          ) : (
+            <span style={{ fontSize: 28, opacity: 0.4 }}>📷</span>
+          )}
+        </Box>
+
+        <CardContent sx={{ paddingBottom: "8px !important" }}>
+          <Typography variant="subtitle1" fontWeight={700}>
+            {candy.name}
+          </Typography>
+
+          <Typography variant="body2" sx={{ opacity: 0.7 }}>
+            {candy.description}
+          </Typography>
+
+          <Typography
+            variant="subtitle1"
+            sx={{ marginTop: 1, fontWeight: 700 }}
+          >
+            R$ {candy.price.toFixed(2)}
+          </Typography>
+        </CardContent>
+      </Card>
+      {isLogged && (
+        <Box display="flex" flexDirection="column">
           <IconButton size="small" onClick={() => onEdit!(candy.id)}>
             <EditIcon sx={{ color: "#0044cc", fontSize: 18 }} />
           </IconButton>
@@ -45,48 +83,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </IconButton>
         </Box>
       )}
-
-      <Box
-        sx={{
-          width: 100,
-          height: 100,
-          borderRadius: "50%",
-          backgroundColor: "#d9d9d9",
-          margin: "0 auto",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        {candy.imageKey ? (
-          <img
-            src={candy.imageKey?.toString()}
-            alt={candy.name}
-            style={{
-              width: "100%",
-              height: "100%",
-              borderRadius: "50%",
-              objectFit: "cover",
-            }}
-          />
-        ) : (
-          <span style={{ fontSize: 28, opacity: 0.4 }}>📷</span>
-        )}
-      </Box>
-
-      <CardContent sx={{ paddingBottom: "8px !important" }}>
-        <Typography variant="subtitle1" fontWeight={700}>
-          {candy.name}
-        </Typography>
-
-        <Typography variant="body2" sx={{ opacity: 0.7 }}>
-          {candy.description}
-        </Typography>
-
-        <Typography variant="subtitle1" sx={{ marginTop: 1, fontWeight: 700 }}>
-          R$ {candy.price.toFixed(2)}
-        </Typography>
-      </CardContent>
-    </Card>
+    </Box>
   );
 };

@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // --- Login Component ---
 export const Login: React.FC = () => {
   // 1. State for managing the input fields
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   // 2. Handler for the form submission
   const handleLogin = (e: React.FormEvent) => {
@@ -71,7 +73,11 @@ export const Login: React.FC = () => {
           </div>
 
           {/* Log-in Button */}
-          <button type="submit" style={styles.loginButton}>
+          <button
+            onClick={() => navigate("/")}
+            type="submit"
+            style={styles.loginButton}
+          >
             Log-in
           </button>
         </form>

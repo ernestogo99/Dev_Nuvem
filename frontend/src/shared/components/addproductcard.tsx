@@ -1,16 +1,14 @@
 import { Add } from "@mui/icons-material";
 import { Card, CardContent, IconButton, Typography } from "@mui/material";
 import type React from "react";
+import { useDialogContext } from "../contexts";
 
 interface IaddProductCard {
   text: string;
-  onClick: () => void;
 }
 
-export const AddproductCard: React.FC<IaddProductCard> = ({
-  text,
-  onClick,
-}) => {
+export const AddproductCard: React.FC<IaddProductCard> = ({ text }) => {
+  const { handleOpenDialog } = useDialogContext();
   return (
     <Card
       sx={{
@@ -24,7 +22,7 @@ export const AddproductCard: React.FC<IaddProductCard> = ({
       }}
     >
       <CardContent>
-        <IconButton onClick={onClick}>
+        <IconButton onClick={handleOpenDialog}>
           <Add />
         </IconButton>
         <Typography>{text}</Typography>
