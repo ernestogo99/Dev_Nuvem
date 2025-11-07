@@ -7,15 +7,16 @@ import { useAuthContext } from "../contexts/authcontext";
 interface ProductCardProps {
   candy: Icandy;
   onEdit?: (id: number) => void;
-  onDelete?: (id: number) => void;
+  handleOpenModal: (candy: Icandy) => void;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
   candy,
   onEdit,
-  onDelete,
+  handleOpenModal,
 }) => {
   const { isLogged } = useAuthContext();
+
   return (
     <Box display="flex">
       <Card
@@ -78,7 +79,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <IconButton size="small" onClick={() => onEdit!(candy.id)}>
             <EditIcon sx={{ color: "#0044cc", fontSize: 18 }} />
           </IconButton>
-          <IconButton size="small" onClick={() => onDelete!(candy.id)}>
+          <IconButton size="small" onClick={() => handleOpenModal(candy)}>
             <DeleteIcon sx={{ color: "#d00000", fontSize: 18 }} />
           </IconButton>
         </Box>

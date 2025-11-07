@@ -1,8 +1,9 @@
 import { Box, Typography } from "@mui/material";
-import { ProductList } from "../../shared/components";
+import { DeleteMessage, ProductList } from "../../shared/components";
 import { type Icandy, CandyType } from "../../shared/interfaces";
 import bigode from "../../assets/Group 55.png";
 import * as React from "react";
+import { useCallback, useState } from "react";
 
 export const Docinhos = React.forwardRef<HTMLDivElement>((props, ref) => {
   const mockCandies: Icandy[] = [
@@ -64,6 +65,18 @@ export const Docinhos = React.forwardRef<HTMLDivElement>((props, ref) => {
     },
   ];
 
+  const [selectedCandy, setSelectedCandy] = useState<Icandy>();
+  const [isOpenDialog, setIsopen] = useState(false);
+
+  const handleOpenDialog = (candy: Icandy) => {
+    setSelectedCandy(candy);
+    setIsopen(true);
+  };
+
+  const handleDelete = useCallback(() => {
+    setIsopen(false);
+  }, []);
+
   return (
     <Box ref={ref}>
       <Typography
@@ -74,10 +87,20 @@ export const Docinhos = React.forwardRef<HTMLDivElement>((props, ref) => {
       >
         Docinhos
       </Typography>
-      <ProductList text="new candy" products={mockCandies} />
+      <ProductList
+        handleOpenModal={handleOpenDialog}
+        text="new candy"
+        products={mockCandies}
+      />
       <Box textAlign="center" mt={10}>
         <img src={bigode} />
       </Box>
+      <DeleteMessage
+        Onclose={() => setIsopen(false)}
+        handleDelete={handleDelete}
+        tittle="Do you want to delete this candy?"
+        show={isOpenDialog}
+      />
     </Box>
   );
 });

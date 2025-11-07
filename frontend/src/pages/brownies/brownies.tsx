@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { ProductList } from "../../shared/components";
+import { DeleteMessage, ProductList } from "../../shared/components";
 import { type Icandy, CandyType } from "../../shared/interfaces";
 import bigode from "../../assets/Group 55.png";
 import * as React from "react";
@@ -64,6 +64,18 @@ export const Brownies = React.forwardRef<HTMLDivElement>((props, ref) => {
     },
   ];
 
+  const [selectedCandy, setSelectedCandy] = React.useState<Icandy>();
+  const [isOpenDialog, setIsopen] = React.useState(false);
+
+  const handleOpenDialog = (candy: Icandy) => {
+    setSelectedCandy(candy);
+    setIsopen(true);
+  };
+
+  const handleDelete = React.useCallback(() => {
+    setIsopen(false);
+  }, []);
+
   return (
     <Box ref={ref}>
       <Typography
@@ -74,10 +86,20 @@ export const Brownies = React.forwardRef<HTMLDivElement>((props, ref) => {
       >
         Brownies
       </Typography>
-      <ProductList text="new candy" products={mockCandies} />
+      <ProductList
+        handleOpenModal={handleOpenDialog}
+        text="new candy"
+        products={mockCandies}
+      />
       <Box textAlign="center" mt={10}>
         <img src={bigode} />
       </Box>
+      <DeleteMessage
+        tittle="Do you want to delete this candy?"
+        Onclose={() => setIsopen(false)}
+        handleDelete={handleDelete}
+        show={isOpenDialog}
+      ></DeleteMessage>
     </Box>
   );
 });

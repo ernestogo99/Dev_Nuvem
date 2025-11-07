@@ -3,21 +3,22 @@ import type React from "react";
 import type { Icandy } from "../interfaces";
 import { ProductCard } from "./productcard";
 import { AddproductCard } from "./addproductcard";
+import { useAuthContext } from "../contexts";
 
 interface IproductListProps {
   products: Icandy[];
   onEdit?: (id: number) => void;
-  onDelete?: (id: number) => void;
+  handleOpenModal?: (candy: Icandy) => void;
   text?: string;
-  onClick?: () => void;
 }
 
 export const ProductList: React.FC<IproductListProps> = ({
   products,
-  onDelete,
+  handleOpenModal,
   onEdit,
   text,
 }) => {
+  const { isLogged } = useAuthContext();
   return (
     <Box mt={4}>
       <Grid gap={7} container justifyContent="center">
@@ -29,10 +30,14 @@ export const ProductList: React.FC<IproductListProps> = ({
             justifyContent="center"
             flexWrap="wrap"
           >
-            <ProductCard candy={product} onEdit={onEdit} onDelete={onDelete} />
+            <ProductCard
+              candy={product}
+              onEdit={onEdit}
+              handleOpenModal={handleOpenModal!}
+            />
           </Grid>
         ))}
-        <AddproductCard text={text!}></AddproductCard>
+        {isLogged && <AddproductCard text={text!}></AddproductCard>}
       </Grid>
     </Box>
   );

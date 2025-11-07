@@ -23,7 +23,7 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ sections }) => {
     <Box
       mt={2}
       sx={{
-        display: { xs: "none", sm: "flex" },
+        display: { sm: "flex" },
         gap: 4,
         alignItems: "center",
       }}
