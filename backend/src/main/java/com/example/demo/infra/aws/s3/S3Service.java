@@ -72,7 +72,7 @@ public class S3Service {
                 .build();
 
             PresignedGetObjectRequest presignedRequest = presigner.presignGetObject(presignRequest);
-            logger.info("Presigned URL: [{}]", presignedRequest.url().toString());
+            logger.info("Presigned URL with key: [{}]", newKey);
             logger.info("HTTP method: [{}]", presignedRequest.httpRequest().method());
 
             return presignedRequest.url().toExternalForm();

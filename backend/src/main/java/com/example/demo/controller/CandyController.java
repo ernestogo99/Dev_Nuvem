@@ -42,20 +42,17 @@ public class CandyController {
             BindingResult bindingResult) throws BadRequestException{
 
         if(bindingResult.hasErrors()){
-            throw new BadRequestException("Register failed. Please ensure that your credentials are correct and that all required fields are filled out properly.", bindingResult);
+            throw new BadRequestException("Failed to create product. Check if all fields are valid.", bindingResult);
         }
         CandyResponseDTO response = candyService.createCandy(candyRequestDTO, imageFile);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-
-
 
     @GetMapping
     @Operation(summary = "Get all candies")
     public ResponseEntity<List<CandyResponseDTO>> getAllCandies() {
         return ResponseEntity.ok(candyService.getAllCandies());
     }
-
 
     @GetMapping("/{id}")
     @Operation(summary = "Get a candy by ID")
@@ -65,13 +62,13 @@ public class CandyController {
         return ResponseEntity.ok(candyService.getCandyById(id));
     }
 
-
-    @PutMapping("/{id}")
+  
+    @PutMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE})
     @Operation(summary = "Update a candy by ID")
     public ResponseEntity<CandyResponseDTO> updateCandy(
-            @Parameter(description = "ID of the candy") @PathVariable Long id,
-            @RequestBody @Valid CandyRequestDTO dto,
-            @RequestPart("image") MultipartFile imageFile
+        @Parameter(description = "ID of the candy") @PathVariable Long id,
+        @RequestPart("candy") @Valid CandyRequestDTO dto,
+        @RequestPart(value = "image", required = false) MultipartFile imageFile
     ) {
         CandyResponseDTO response = candyService.updateCandyById(id, dto, imageFile);
         return ResponseEntity.ok(response);

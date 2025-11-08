@@ -4,6 +4,7 @@ package com.example.demo.services;
 import com.example.demo.domain.enums.CandyType;
 import com.example.demo.domain.enums.LogActions;
 import com.example.demo.domain.model.Candy;
+import com.example.demo.exceptions.BadRequestException;
 import com.example.demo.exceptions.CandyNotFoundException;
 import com.example.demo.infra.aws.s3.S3Service;
 import com.example.demo.infra.repositories.CandyRepository;
@@ -12,7 +13,6 @@ import com.example.demo.shared.dto.request.CrudLogRequestDTO;
 import com.example.demo.shared.dto.response.CandyResponseDTO;
 import com.example.demo.shared.mapper.CandyMapper;
 
-import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,7 +41,6 @@ public class CandyService {
     @Autowired
     private S3Service s3Service;
 
- 
 
     public CandyResponseDTO createCandy(CandyRequestDTO candyRequestDTO, MultipartFile imageFile) {
         try {
@@ -206,8 +205,12 @@ public class CandyService {
         candy.setPrice(candyRequestDTO.price());
         candy.setType(candyRequestDTO.type());
         try{
-            String newKey = s3Service.updateFile(file, candy.getImageKey());
 
+            if(file != null && !file.isEmpty()){
+                String newKey = s3Service.updateFile(file, candy.getImageKey());
+                candy.setImageKey(newKey);   
+            }
+    
             Candy updated=this.candyRepository.save(candy);
 
             List<Map<String, String>> candiesList = new ArrayList<>();
@@ -217,7 +220,8 @@ public class CandyService {
             );
             CrudLogRequestDTO crudLogRequestDTO = new CrudLogRequestDTO(LogActions.UPDATE.toString(), candiesList, Instant.now().toString());
             this.crudLogService.createLog(crudLogRequestDTO);
-            return this.candyMapper.toResponseDTO(updated);
+
+            return mapCandyWithImageUrl(candy);
         } catch(IOException e){
             throw new RuntimeException();
         }
