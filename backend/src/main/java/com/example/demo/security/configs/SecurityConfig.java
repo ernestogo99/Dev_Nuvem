@@ -45,6 +45,7 @@
                     .requestMatchers(HttpMethod.POST, "api/auth/signup/**").permitAll()
                     .requestMatchers(HttpMethod.POST, "api/auth/login/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "api-docs/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "candies/**").permitAll()
                                 .requestMatchers(
                                         "/v3/api-docs/**",
                                         "/swagger-ui/**",
