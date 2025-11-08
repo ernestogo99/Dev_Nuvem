@@ -223,7 +223,7 @@ public class CandyService {
 
             return mapCandyWithImageUrl(candy);
         } catch(IOException e){
-            throw new RuntimeException();
+            throw new RuntimeException("Error updating candy image for candy with id " + id, e);
         }
     }
         

@@ -58,7 +58,7 @@ public class S3Service {
 
     public String getFileUrl(String key) {
 
-        String newKey = key.replace("candies", "resized");
+        String newKey = key.replaceFirst("candies/", "resized/");
   
         try{
             GetObjectRequest objectRequest = GetObjectRequest.builder()
@@ -113,7 +113,7 @@ public class S3Service {
 
     public byte[] downloadFile(String key) throws IOException{
 
-        String newKey = key.replace("candies", "resized");
+        String newKey = key.replaceFirst("candies/", "resized/");
         
         ResponseInputStream<GetObjectResponse> object = this.s3Client.getObject(GetObjectRequest.builder()
         .bucket(bucketName)
