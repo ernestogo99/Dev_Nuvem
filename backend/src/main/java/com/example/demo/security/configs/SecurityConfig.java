@@ -36,7 +36,7 @@
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception{
             return http
-                .cors(AbstractHttpConfigurer::disable)
+                .cors(cors ->{})
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // Set permissions on endpoints

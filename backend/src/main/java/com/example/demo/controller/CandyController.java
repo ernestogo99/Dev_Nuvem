@@ -54,14 +54,14 @@ public class CandyController {
         return ResponseEntity.ok(candyService.getCandyById(id));
     }
 
-
-    @PutMapping("/{id}")
-    @Operation(summary = "Update a candy by ID")
+    @PutMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @Operation(summary = "Update a candy by id")
     public ResponseEntity<CandyResponseDTO> updateCandy(
-            @Parameter(description = "ID of the candy") @PathVariable Long id,
-            @RequestBody @Valid CandyRequestDTO dto
+            @PathVariable Long id,
+            @RequestPart("candy") @Valid CandyRequestDTO dto,
+            @RequestPart(value = "image", required = false) MultipartFile imageFile
     ) {
-        CandyResponseDTO response = candyService.updateCandyById(id, dto);
+        CandyResponseDTO response = candyService.updateCandyById(id, dto, imageFile);
         return ResponseEntity.ok(response);
     }
 

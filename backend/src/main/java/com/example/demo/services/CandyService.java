@@ -181,22 +181,37 @@ public class CandyService {
     }
 
 
-    public CandyResponseDTO updateCandyById(Long id,CandyRequestDTO candyRequestDTO){
-        Candy candy=this.getCandy(id);
+    public CandyResponseDTO updateCandyById(Long id, CandyRequestDTO candyRequestDTO, MultipartFile imageFile) {
+        Candy candy = this.getCandy(id);
+
+
         candy.setDescription(candyRequestDTO.description());
         candy.setName(candyRequestDTO.name());
         candy.setPrice(candyRequestDTO.price());
         candy.setType(candyRequestDTO.type());
 
-        Candy updated=this.candyRepository.save(candy);
+
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                String imageKey = s3Service.uploadFile(imageFile);
+                candy.setImageKey(imageKey);
+            } catch (IOException e) {
+                throw new RuntimeException("Error while uploading the image", e);
+            }
+        }
+
+        Candy updated = this.candyRepository.save(candy);
+
 
         List<Map<String, String>> candiesList = new ArrayList<>();
-
-        candiesList.add(
-            getMappedCandy(candy)
+        candiesList.add(getMappedCandy(candy));
+        CrudLogRequestDTO crudLogRequestDTO = new CrudLogRequestDTO(
+                LogActions.UPDATE.toString(),
+                candiesList,
+                Instant.now().toString()
         );
-        CrudLogRequestDTO crudLogRequestDTO = new CrudLogRequestDTO(LogActions.UPDATE.toString(), candiesList, Instant.now().toString());
         this.crudLogService.createLog(crudLogRequestDTO);
+
         return this.candyMapper.toResponseDTO(updated);
     }
 
