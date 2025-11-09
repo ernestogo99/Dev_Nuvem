@@ -42,6 +42,7 @@
                 // Set permissions on endpoints
                 .authorizeHttpRequests( auth -> auth
                 // public endpoints
+                                .requestMatchers(HttpMethod.GET,"/candies/**").permitAll()
                     .requestMatchers(HttpMethod.POST, "api/auth/signup/**").permitAll()
                     .requestMatchers(HttpMethod.POST, "api/auth/login/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "api-docs/**").permitAll()
