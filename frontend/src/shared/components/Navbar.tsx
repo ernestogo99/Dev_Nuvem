@@ -11,6 +11,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import "@fontsource/federo/400.css";
 import NavigationMenu from "./NavigationMenu";
 import { Outlet, useNavigate } from "react-router-dom";
+import { useAuthContext } from "../contexts";
 
 interface InavbarProps {
   sections: {
@@ -25,13 +26,13 @@ const Navbar: React.FC<InavbarProps> = ({ sections }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const isMenuOpen = Boolean(anchorEl);
   const navigate = useNavigate();
+  const { logout } = useAuthContext();
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleMenuClose = () => {
-    navigate("/login");
     setAnchorEl(null);
   };
 
@@ -51,7 +52,9 @@ const Navbar: React.FC<InavbarProps> = ({ sections }) => {
       onClose={handleMenuClose}
       slotProps={{ paper: { sx: { minWidth: 240 } } }}
     >
-      <MenuItem onClick={handleMenuClose}>Log in</MenuItem>
+      <MenuItem onClick={() => navigate("/login")}>Log in</MenuItem>
+      <MenuItem onClick={logout}>Log out</MenuItem>
+      <MenuItem sx={{ display: "none" }} onClick={handleMenuClose}></MenuItem>
     </Menu>
   );
 

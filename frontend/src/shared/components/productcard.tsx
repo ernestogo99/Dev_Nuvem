@@ -41,9 +41,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             justifyContent: "center",
           }}
         >
-          {candy.imageKey ? (
+          {candy.imageUrl ? (
             <img
-              src={candy.imageKey?.toString()}
+              src={candy.imageUrl?.toString()}
               alt={candy.name}
               style={{
                 width: "100%",

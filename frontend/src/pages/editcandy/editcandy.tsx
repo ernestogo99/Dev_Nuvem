@@ -1,32 +1,33 @@
+// src/shared/components/EditCandy.tsx
+import { zodResolver } from "@hookform/resolvers/zod";
 import { PhotoCamera } from "@mui/icons-material";
 import {
-  Box,
-  Button,
   Dialog,
   DialogContent,
-  FormControl,
+  Box,
   IconButton,
-  MenuItem,
-  Select,
-  Stack,
-  TextField,
   Typography,
+  TextField,
+  FormControl,
+  Select,
+  MenuItem,
+  Stack,
+  Button,
 } from "@mui/material";
+import React from "react";
+import { useForm, Controller } from "react-hook-form";
+import toast from "react-hot-toast";
 
 import {
   type IcandyRequest,
   candySchema,
   CandyType,
 } from "../../shared/interfaces";
-import { useDialogContext } from "../../shared/contexts";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
 import { candyService } from "../../shared/services";
-import toast from "react-hot-toast";
+import { useEditCandyDialog } from "../../shared/contexts";
 
-export const CreateCandy = () => {
-  const { isOpen, handleCloseDialog } = useDialogContext();
+export const EditCandy: React.FC = () => {
+  const { isOpen, candyId, closeEditDialog } = useEditCandyDialog();
 
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
@@ -44,6 +45,30 @@ export const CreateCandy = () => {
     },
   });
 
+  React.useEffect(() => {
+    if (!isOpen || !candyId) return;
+
+    const loadCandy = async () => {
+      const result = await candyService.getCandyById(candyId);
+      if (result instanceof Error) {
+        toast.error(result.message);
+        closeEditDialog();
+      } else {
+        reset({
+          name: result.name,
+          description: result.description,
+          price: result.price,
+          type: result.type,
+        });
+        if (result.imageUrl) {
+          setPreviewUrl(result.imageUrl);
+        }
+      }
+    };
+
+    loadCandy();
+  }, [isOpen, candyId, reset, closeEditDialog]);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
@@ -56,30 +81,29 @@ export const CreateCandy = () => {
     setSelectedFile(null);
     setPreviewUrl(null);
     reset();
-    handleCloseDialog();
+    closeEditDialog();
   };
 
   const onSubmitForm = async (data: IcandyRequest) => {
-    if (!selectedFile) {
-      toast.error("Please select an image.");
-      return;
-    }
-
-    const result = await candyService.createCandy(data, selectedFile);
+    const result = await candyService.updateCandy(
+      candyId!,
+      data,
+      selectedFile ?? undefined
+    );
 
     if (result instanceof Error) {
       toast.error(result.message);
     } else {
-      toast.success(`Candy ${result.name} created successfully!`);
+      toast.success(`Candy ${result.name} updated successfully!`);
       handleClose();
     }
   };
 
   React.useEffect(() => {
     return () => {
-      if (previewUrl) URL.revokeObjectURL(previewUrl);
+      if (previewUrl && selectedFile) URL.revokeObjectURL(previewUrl);
     };
-  }, [previewUrl]);
+  }, [previewUrl, selectedFile]);
 
   return (
     <Dialog
@@ -105,6 +129,7 @@ export const CreateCandy = () => {
           alignItems="center"
           justifyContent="center"
         >
+          {/* Upload imagem */}
           <Box
             component="label"
             sx={{
@@ -118,9 +143,7 @@ export const CreateCandy = () => {
               cursor: "pointer",
               boxShadow: "0 0 4px rgba(0,0,0,0.15)",
               overflow: "hidden",
-              "&:hover": {
-                backgroundColor: "#f7f7f7",
-              },
+              "&:hover": { backgroundColor: "#f7f7f7" },
             }}
           >
             <input type="file" hidden onChange={handleFileChange} />
@@ -138,6 +161,7 @@ export const CreateCandy = () => {
             )}
           </Box>
 
+          {/* Nome */}
           <Box width="100%">
             <Typography sx={{ fontWeight: 500, mb: 0.5 }}>
               Sweet Name
@@ -152,6 +176,7 @@ export const CreateCandy = () => {
             />
           </Box>
 
+          {/* Descrição */}
           <Box width="100%">
             <Typography sx={{ fontWeight: 500, mb: 0.5 }}>
               Sweet description
@@ -171,15 +196,15 @@ export const CreateCandy = () => {
               Sweet price
             </Typography>
             <TextField
-              inputProps={{
-                step: "0.01",
-                inputMode: "decimal",
-              }}
               {...register("price", { valueAsNumber: true })}
               error={!!errors.price}
               helperText={errors.price?.message}
               fullWidth
               type="number"
+              inputProps={{
+                step: "0.01",
+                inputMode: "decimal",
+              }}
               placeholder="0.00"
               sx={{ backgroundColor: "#fff", borderRadius: "10px" }}
             />
@@ -217,7 +242,7 @@ export const CreateCandy = () => {
             width="100%"
           >
             <Button type="submit" variant="contained" color="success">
-              Create
+              Update
             </Button>
             <Button variant="contained" color="error" onClick={handleClose}>
               Cancel

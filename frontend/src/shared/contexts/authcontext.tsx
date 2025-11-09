@@ -8,6 +8,8 @@ import React, {
 
 interface IauthContextProps {
   isLogged: boolean;
+  login: () => void;
+  logout: () => void;
 }
 
 interface IchildrenProps {
@@ -34,7 +36,15 @@ export const AuthContextProvider: React.FC<IchildrenProps> = ({ children }) => {
     setIslogged(!!token);
   }, []);
 
+  const login = () => setIslogged(true);
+  const logout = () => {
+    localStorage.removeItem("token");
+    setIslogged(false);
+  };
+
   return (
-    <authContext.Provider value={{ isLogged }}>{children}</authContext.Provider>
+    <authContext.Provider value={{ isLogged, login, logout }}>
+      {children}
+    </authContext.Provider>
   );
 };
