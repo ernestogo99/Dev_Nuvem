@@ -36,12 +36,13 @@
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception{
             return http
-                .cors(AbstractHttpConfigurer::disable)
+                .cors(cors ->{})
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // Set permissions on endpoints
                 .authorizeHttpRequests( auth -> auth
                 // public endpoints
+                                .requestMatchers(HttpMethod.GET,"/candies/**").permitAll()
                     .requestMatchers(HttpMethod.POST, "api/auth/signup/**").permitAll()
                     .requestMatchers(HttpMethod.POST, "api/auth/login/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "api-docs/**").permitAll()
