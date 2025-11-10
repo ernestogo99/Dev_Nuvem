@@ -57,7 +57,7 @@ export const DeleteMessage: React.FC<IdeleteDialog> = ({
           sx={{ minWidth: 120 }}
           onClick={handleDelete}
         >
-          Excluir
+          Yes
         </Button>
         <Button
           variant="contained"
@@ -65,7 +65,7 @@ export const DeleteMessage: React.FC<IdeleteDialog> = ({
           onClick={Onclose}
           sx={{ minWidth: 120 }}
         >
-          Cancelar
+          Cancel
         </Button>
       </DialogActions>
     </Dialog>

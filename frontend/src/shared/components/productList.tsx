@@ -21,11 +21,11 @@ export const ProductList: React.FC<IproductListProps> = ({
   const { isLogged } = useAuthContext();
   return (
     <Box mt={4}>
-      <Grid gap={7} container justifyContent="center">
+      <Grid gap={4} container spacing={2} justifyContent="center">
         {products.map((product) => (
           <Grid
             key={product.id}
-            size={{ xs: 12, sm: 6, md: 1 }}
+            size={{ xs: 12, sm: 6, md: 2 }}
             display="flex"
             justifyContent="center"
             flexWrap="wrap"
@@ -37,7 +37,9 @@ export const ProductList: React.FC<IproductListProps> = ({
             />
           </Grid>
         ))}
-        {isLogged && <AddproductCard text={text!}></AddproductCard>}
+        {isLogged && ( <Grid size={{ xs: 12, sm: 6, md: 2 }} display="flex" justifyContent="center">
+            <AddproductCard text={text!} />
+          </Grid>)}
       </Grid>
     </Box>
   );

@@ -7,7 +7,7 @@ import { candyService } from "../../shared/services";
 import { EditCandy } from "../editcandy/editcandy";
 import { useEditCandyDialog } from "../../shared/contexts";
 
-export const Brownies = React.forwardRef<HTMLDivElement>((props, ref) => {
+export const Brownies = React.forwardRef<HTMLDivElement>((_props, ref) => {
   const { list, open, openDialog, closeDialog, deleteItem } = useCandyLogic(
     candyService.getallBrownies
   );

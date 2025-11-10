@@ -6,10 +6,10 @@ import { candyService } from "../../shared/services";
 import { useCandyLogic } from "../../shared/hooks/usecandyLogic";
 import { EditCandy } from "../editcandy/editcandy";
 import { useEditCandyDialog } from "../../shared/contexts";
-import { CreateCandy } from "../createcandy/createcandy";
 
-export const Cake = React.forwardRef<HTMLDivElement>((props, ref) => {
-  const { list, open, openDialog, closeDialog, deleteItem, addItem } =
+
+export const Cake = React.forwardRef<HTMLDivElement>((_props, ref) => {
+  const { list, open, openDialog, closeDialog, deleteItem} =
     useCandyLogic(candyService.getallCakes);
 
   const { openEditDialog } = useEditCandyDialog();
