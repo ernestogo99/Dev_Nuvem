@@ -24,7 +24,7 @@ import java.net.http.HttpHeaders;
 import java.util.List;
 
 @RestController
-@RequestMapping("/candies")
+@RequestMapping("/api/candies")
 @Tag(name = "Candies")
 @RequiredArgsConstructor
 public class CandyController {
