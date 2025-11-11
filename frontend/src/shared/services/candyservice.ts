@@ -3,7 +3,7 @@ import { api } from "./axiosconfig/config";
 
 const getallCakes = async (): Promise<Icandy[] | Error> => {
   try {
-    const { data } = await api.get("/candies/cakes");
+    const { data } = await api.get("/api/candies/cakes");
     if (data) {
       return data;
     }
@@ -17,7 +17,7 @@ const getallCakes = async (): Promise<Icandy[] | Error> => {
 
 const getallMuffins = async (): Promise<Icandy[] | Error> => {
   try {
-    const { data } = await api.get("/candies/muffins");
+    const { data } = await api.get("/api/candies/muffins");
     if (data) {
       return data;
     }
@@ -31,7 +31,7 @@ const getallMuffins = async (): Promise<Icandy[] | Error> => {
 
 const getallDocinhos = async (): Promise<Icandy[] | Error> => {
   try {
-    const { data } = await api.get("/candies/docinhos");
+    const { data } = await api.get("/api/candies/docinhos");
     if (data) {
       return data;
     }
@@ -46,7 +46,7 @@ const getallDocinhos = async (): Promise<Icandy[] | Error> => {
 
 const getallBrownies = async (): Promise<Icandy[] | Error> => {
   try {
-    const { data } = await api.get("/candies/brownies");
+    const { data } = await api.get("/api/candies/brownies");
     if (data) {
       return data;
     }
@@ -60,7 +60,7 @@ const getallBrownies = async (): Promise<Icandy[] | Error> => {
 
 const getallCandies = async (): Promise<Icandy[] | Error> => {
   try {
-    const { data } = await api.get("/candies");
+    const { data } = await api.get("/api/candies");
     if (data) {
       return data;
     }
@@ -84,7 +84,7 @@ const createCandy = async (
     );
     formData.append("image", image);
 
-    const { data } = await api.post("/candies", formData, {
+    const { data } = await api.post("/api/candies", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -100,7 +100,7 @@ const createCandy = async (
 
 const getCandyById = async (id: number): Promise<Icandy | Error> => {
   try {
-    const { data } = await api.get(`/candies/${id}`);
+    const { data } = await api.get(`/api/candies/${id}`);
     if (data) {
       return data;
     }
@@ -113,7 +113,7 @@ const getCandyById = async (id: number): Promise<Icandy | Error> => {
 
 const deleteCandy = async (id: number): Promise<void | Error> => {
   try {
-    await api.delete(`/candies/${id}`);
+    await api.delete(`/api/candies/${id}`);
   } catch (error: any) {
     const message = error.response?.data?.message || "Candy not found.";
     return new Error(message);
@@ -137,7 +137,7 @@ const updateCandy = async (
       formData.append("image", image);
     }
 
-    const { data } = await api.put(`/candies/${id}`, formData, {
+    const { data } = await api.put(`/api/candies/${id}`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
