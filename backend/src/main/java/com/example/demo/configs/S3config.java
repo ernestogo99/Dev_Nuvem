@@ -3,22 +3,23 @@ package com.example.demo.configs;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import software.amazon.awssdk.auth.credentials.AwsSessionCredentials;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+import java.net.URI;
 
 @Configuration
 public class S3config {
 
-    @Value("${spring.cloud.aws.credentials.access-key}")
+    @Value("${minio.access-key}")
     private String accessKey;
 
-    @Value("${spring.cloud.aws.credentials.secret-key}")
+    @Value("${minio.secret-key}")
     private String secretKey;
 
-    @Value("${spring.cloud.aws.credentials.session-token}")
-    private String sessionToken;
+    @Value("${minio.endpoint}")
+    private String minioEndpoint;
 
     @Value("${spring.cloud.aws.region.static}")
     private String region;
@@ -26,15 +27,13 @@ public class S3config {
     @Bean
     public S3Client s3Client() {
 
-        AwsSessionCredentials sessionCredentials = AwsSessionCredentials.create(
-                accessKey,
-                secretKey,
-                sessionToken
-        );
+        AwsBasicCredentials credentials = AwsBasicCredentials.create(accessKey, secretKey);
 
         return S3Client.builder()
+                .endpointOverride(URI.create(minioEndpoint))
+                .forcePathStyle(true)
                 .region(Region.of(region))
-                .credentialsProvider(StaticCredentialsProvider.create(sessionCredentials))
+                .credentialsProvider(StaticCredentialsProvider.create(credentials))
                 .build();
     }
 }
