@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  # 1. POSTGRESQL DATABASE SERVICE
+  db:
+    image: postgres:15-alpine
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: pretty-cake-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrescake
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  # 2. MINIO OBJECT STORAGE SERVICE
+  minio:
+    image: minio/minio
+    container_name: minio_storage
+    restart: always
+    environment:
+      MINIO_ROOT_USER: MINIO_ROOT_USER
+      MINIO_ROOT_PASSWORD: MINIOCAKE
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+
+  # 3. YOUR SPRING BOOT APPLICATION SERVICE
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spring_backend
+    depends_on:
+      - db
+      - minio
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    environment:
+      DATASOURCE_URL: jdbc:postgresql://db:5432/pretty-cake-db
+      MINIO_ENDPOINT: http://minio:9000
+
+volumes:
+  postgres_data:
+  minio_data:
