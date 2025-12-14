@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { Home, Login } from "../pages";
+import LogViewer from "../pages/logviewer/logViewer";
 
 export const route = createBrowserRouter([
   {
@@ -10,4 +11,8 @@ export const route = createBrowserRouter([
     path: "/",
     element: <Home></Home>,
   },
+  {
+    path: "/logs",
+    element: <LogViewer />,
+  }
 ]);
