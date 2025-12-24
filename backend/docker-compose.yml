@@ -18,9 +18,8 @@ services:
     container_name: minio_storage
     restart: always
     environment:
-      MINIO_ROOT_USER: MINIO_ROOT_USER
-      MINIO_ROOT_PASSWORD: MINIOCAKE
-      MINIO_DEFAULT_BUCKETS: cloud-ufc-bucket2/data
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin123
     volumes:
       - minio_data:/data
     command: server /data --console-address ":9001"
@@ -40,14 +39,22 @@ services:
     ports:
       - "8080:8080"
     environment:
-      DATASOURCE_URL: jdbc:postgresql://db:5432/pretty-cake-db
-      DATASOURCE_USERNAME: postgres 
-      DATASOURCE_PASSWORD: postgrescake
-    
-      MINIO_ENDPOINT: http://minio:9000
-      MINIO_ACCESS_KEY: MINIO_ROOT_USER 
-      MINIO_SECRET_KEY: MINIOCAKE
+      DATASOURCE_URL: ${DATASOURCE_URL:-jdbc:postgresql://db:5432/pretty-cake-db}
+      DATASOURCE_USERNAME: ${DATASOURCE_USERNAME:-postgres}
+      DATASOURCE_PASSWORD: ${DATASOURCE_PASSWORD:-postgrescake}
       
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT:-http://minio:9000}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minioadmin123}
+      
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      AWS_ACCESS_KEY: ${AWS_ACCESS_KEY:-myaccesskey}
+      AWS_SECRET_ACCESS: ${AWS_SECRET_ACCESS:-mysecretkey}
+      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN:-mytoken}
+      
+      JWT_SECRET: ${JWT_SECRET:-7Z4/ixOoIRj48XHPDdY2FIXEWLUWHYl7UU9lmVDlhzo=}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
+          
 
 volumes:
   postgres_data:
