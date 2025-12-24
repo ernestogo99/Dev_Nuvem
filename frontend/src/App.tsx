@@ -1,14 +1,14 @@
-import '@fontsource/figtree/700.css';
-import '@fontsource/figtree/400.css';
-import Navbar from './shared/components/Navbar';
-
+import "@fontsource/figtree/700.css";
+import "@fontsource/figtree/400.css";
+import { RouterProvider } from "react-router-dom";
+import { route } from "./routes";
 
 function App() {
   return (
     <>
-    <Navbar/>
+      <RouterProvider router={route}></RouterProvider>
     </>
   );
 }
 
-export default App
+export default App;

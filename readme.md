@@ -9,6 +9,7 @@ EC2,S3,RDS,DYNAMODB E SNS/SQS
 - Guilherme Barbosa
 - Bruna Gomes
 - Marcos Antonio
+- Michael Young
 
 ## Technologies Used
 

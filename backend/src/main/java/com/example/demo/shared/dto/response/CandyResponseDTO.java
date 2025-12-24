@@ -9,6 +9,7 @@ public record CandyResponseDTO(
         String name,
         BigDecimal price,
         String description,
-        CandyType type
+        CandyType type,
+        String imageUrl
 ) {
 }
