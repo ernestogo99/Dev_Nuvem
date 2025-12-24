@@ -7,8 +7,8 @@ services:
     restart: always
     environment:
       POSTGRES_DB: pretty-cake-db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgrescake 
+      POSTGRES_USER: postgre
+      POSTGRES_PASSWORD: postgrescake
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
