@@ -26,6 +26,13 @@ services:
     ports:
       - "9000:9000"
       - "9001:9001"
+  rabbitmq:
+    image: 'rabbitmq:latest'    
+    environment:
+      - 'RABBITMQ_DEFAULT_PASS=secret'
+      - 'RABBITMQ_DEFAULT_USER=myuser'
+    ports:  
+      - '5672:5672'
 
   api:
     build:
@@ -53,6 +60,10 @@ services:
       AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN:-mytoken}
       
       JWT_SECRET: ${JWT_SECRET:-7Z4/ixOoIRj48XHPDdY2FIXEWLUWHYl7UU9lmVDlhzo=}
+
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-secret}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-myuser}
+
       FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
           
 

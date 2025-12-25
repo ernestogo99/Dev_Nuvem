@@ -40,6 +40,12 @@ public class CandyService {
     @Autowired
     private MinioService minioService;
 
+    @Autowired
+    private RabbitmqProducerService rabbitmqProducerService;
+
+    @Autowired
+    private RabbitmqConsumerService rabbitmqConsumerService;
+
 
     public CandyResponseDTO createCandy(CandyRequestDTO candyRequestDTO, MultipartFile imageFile) {
         try {
@@ -50,6 +56,9 @@ public class CandyService {
             }
             String imageKey = minioService.uploadFile(imageFile);            
             candy.setImageKey(imageKey);
+
+            String message = "testando imagem enviada: " +  imageFile.getName();
+            rabbitmqProducerService.send(message);
 
             Candy saved = this.candyRepository.save(candy);
 
