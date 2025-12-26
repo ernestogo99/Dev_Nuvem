@@ -11,7 +11,8 @@ import org.springframework.context.annotation.Bean;
     import org.springframework.security.config.annotation.web.builders.HttpSecurity;
     import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
     import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-    import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
     import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
     import org.springframework.security.crypto.password.PasswordEncoder;
     import org.springframework.security.web.SecurityFilterChain;
@@ -44,6 +45,7 @@ import com.example.demo.services.UserDetailsServiceImpl;
         public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception{
             return http
                 .cors(cors-> cors.configurationSource(corsConfigurationSource()))
+                //.cors(CorsConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // Set permissions on endpoints
@@ -70,14 +72,16 @@ import com.example.demo.services.UserDetailsServiceImpl;
 
           @Bean
         public CorsConfigurationSource corsConfigurationSource() {
-
+            System.out.println("FRONTEND_URL configurada: " + frontUrl); // Debug
             CorsConfiguration config = new CorsConfiguration();
 
+        
             config.setAllowedOrigins(List.of(frontUrl));
             config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
             config.setAllowCredentials(true);
-            config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-
+            config.setAllowedHeaders(List.of("*"));
+            config.setExposedHeaders(List.of("Authorization")); 
+            
             UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
             source.registerCorsConfiguration("/**", config);
             return source;
