@@ -43,9 +43,6 @@ public class CandyService {
     @Autowired
     private RabbitmqProducerService rabbitmqProducerService;
 
-    @Autowired
-    private RabbitmqConsumerService rabbitmqConsumerService;
-
 
     public CandyResponseDTO createCandy(CandyRequestDTO candyRequestDTO, MultipartFile imageFile) {
         try {

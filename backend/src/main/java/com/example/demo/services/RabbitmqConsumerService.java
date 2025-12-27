@@ -50,11 +50,13 @@ public class RabbitmqConsumerService {
     }
 
     public static byte[] toByteArray(BufferedImage bufferedImage,  String format) throws IOException{
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(bufferedImage, format, baos);
-        byte[] bytes = baos.toByteArray();
-
-        return bytes;
+        try(ByteArrayOutputStream baos = new ByteArrayOutputStream()){
+            ImageIO.write(bufferedImage, format, baos);
+            byte[] bytes = baos.toByteArray();
+        
+            return bytes;
+        }
+        
     }
 
     
@@ -67,9 +69,11 @@ public class RabbitmqConsumerService {
             .outputFormat("JPEG")
             .outputQuality(1)
             .toOutputStream(outputStream);
+        
         byte[] data = outputStream.toByteArray();
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
-        return ImageIO.read(inputStream);
+        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(data)) {
+            return ImageIO.read(inputStream);
+        }
     }
 
 }
