@@ -54,10 +54,10 @@ public class CandyService {
             if(imageFile == null || imageFile.isEmpty()){
                 throw new BadRequestException("Image file is required");
             }
-            String imageKey = minioService.uploadFile(imageFile);            
+            String imageKey = minioService.uploadFile(imageFile);       
             candy.setImageKey(imageKey);
 
-            String message = "testando imagem enviada: " +  imageFile.getName();
+            String message = imageKey;
             rabbitmqProducerService.send(message);
 
             Candy saved = this.candyRepository.save(candy);

@@ -14,6 +14,8 @@ import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
 import io.minio.http.Method;
+
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -47,6 +49,25 @@ public class MinioService {
             );
 
             return objectName;
+
+        } catch(Exception e ){
+            logger.error("Error while uploading to MinIO", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void uploadResizedFile(byte[] file, String key) throws IOException {
+        String newKey = key.replaceFirst("candies/", "resized/");
+
+        try(InputStream inputStream = new ByteArrayInputStream(file)){
+            minioClient.putObject(
+                PutObjectArgs.builder()
+                .bucket(bucketName)
+                .object(newKey)
+                .stream(inputStream, file.length, -1)
+                .contentType("application/octet-stream")
+                .build()
+            );
 
         } catch(Exception e ){
             logger.error("Error while uploading to MinIO", e);
@@ -121,9 +142,23 @@ public class MinioService {
             return inputStream.readAllBytes();
         } catch (Exception e){
             throw new RuntimeException("Error while downloading file", e);
-        }
-            
+        }           
+    }
 
+
+     public byte[] getOriginalFile(String key) throws IOException{
+   
+        try(InputStream inputStream = minioClient.getObject(
+                GetObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object(key)
+                    .build()))
+        {
+            return inputStream.readAllBytes();
+        } catch (Exception e){
+            throw new RuntimeException("Error while fetching file", e);
+        }
+        
     }
         
 
