@@ -40,6 +40,9 @@ public class CandyService {
     @Autowired
     private MinioService minioService;
 
+    @Autowired
+    private RabbitmqProducerService rabbitmqProducerService;
+
 
     public CandyResponseDTO createCandy(CandyRequestDTO candyRequestDTO, MultipartFile imageFile) {
         try {
@@ -48,8 +51,11 @@ public class CandyService {
             if(imageFile == null || imageFile.isEmpty()){
                 throw new BadRequestException("Image file is required");
             }
-            String imageKey = minioService.uploadFile(imageFile);            
+            String imageKey = minioService.uploadFile(imageFile);       
             candy.setImageKey(imageKey);
+
+            String message = imageKey;
+            rabbitmqProducerService.send(message);
 
             Candy saved = this.candyRepository.save(candy);
 
