@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
     import org.springframework.security.config.annotation.web.builders.HttpSecurity;
     import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
     import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
+
 import org.springframework.security.config.http.SessionCreationPolicy;
     import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
     import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,21 +49,15 @@ import com.example.demo.services.UserDetailsServiceImpl;
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // Set permissions on endpoints
-                .authorizeHttpRequests( auth -> auth
-                // public endpoints
+                    .authorizeHttpRequests(auth -> auth
+                            // public endpoints
+                            .requestMatchers(HttpMethod.POST, "/api/auth/signup/**").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/api/auth/login/**").permitAll()
+                            .requestMatchers(HttpMethod.GET, "/api/candies/**").permitAll()
+                            .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
 
-                    .requestMatchers(HttpMethod.POST, "api/auth/signup/**").permitAll()
-                    .requestMatchers(HttpMethod.POST, "api/auth/login/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "api-docs/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "api/candies/**").permitAll()
-                                .requestMatchers(
-                                        "/v3/api-docs/**",
-                                        "/swagger-ui/**",
-                                        "/swagger-ui.html"
-                                ).permitAll()
-
-                //private endpoints
-                    .anyRequest().authenticated()
+                            // private endpoints
+                            .anyRequest().authenticated()
                 ).authenticationManager(authenticationManager)
 
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

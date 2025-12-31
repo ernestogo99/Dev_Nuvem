@@ -3,7 +3,7 @@ import { api } from "./axiosconfig/config";
 
 const signUp = async (data: IRegister): Promise<void | Error> => {
   try {
-    await api.post("/api/auth/signup", data);
+    await api.post("/auth/signup", data);
   } catch (error: any) {
     const message = error.response?.data?.message || "Error during register.";
     return new Error(message);
@@ -12,7 +12,7 @@ const signUp = async (data: IRegister): Promise<void | Error> => {
 
 const login = async (loginData: Ilogin): Promise<IloginResponse | Error> => {
   try {
-    const { data } = await api.post("/api/auth/login", loginData);
+    const { data } = await api.post("/auth/login", loginData);
     return data;
   } catch (error: any) {
     const message = error.response?.data?.message || "Invalid credentials.";
