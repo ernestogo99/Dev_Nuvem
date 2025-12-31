@@ -47,21 +47,15 @@ import com.example.demo.services.UserDetailsServiceImpl;
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // Set permissions on endpoints
-                .authorizeHttpRequests( auth -> auth
-                // public endpoints
+                    .authorizeHttpRequests(auth -> auth
+                            // public endpoints
+                            .requestMatchers(HttpMethod.POST, "/api/auth/signup/**").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/api/auth/login/**").permitAll()
+                            .requestMatchers(HttpMethod.GET, "/api/candies/**").permitAll()
+                            .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
 
-                    .requestMatchers(HttpMethod.POST, "/api/auth/signup/**").permitAll()
-                    .requestMatchers(HttpMethod.POST, "/api/auth/login/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "api-docs/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/api/candies/**").permitAll()
-                                .requestMatchers(
-                                        "/v3/api-docs/**",
-                                        "/swagger-ui/**",
-                                        "/swagger-ui.html"
-                                ).permitAll()
-
-                //private endpoints
-                    .anyRequest().authenticated()
+                            // private endpoints
+                            .anyRequest().authenticated()
                 ).authenticationManager(authenticationManager)
 
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
@@ -73,10 +67,11 @@ import com.example.demo.services.UserDetailsServiceImpl;
 
             CorsConfiguration config = new CorsConfiguration();
 
-            config.setAllowedOrigins(List.of(frontUrl));
+            config.setAllowedOrigins(List.of("*"));
             config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
             config.setAllowCredentials(true);
             config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+            config.setExposedHeaders(List.of("*"));
 
             UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
             source.registerCorsConfiguration("/**", config);
