@@ -35,6 +35,9 @@ public class MinioService {
     @Value("${minio.bucket.name}")
     private String bucketName;
 
+    @Value("${minio.endpoint}")
+    private String minioEndpoint;
+
     public String uploadFile(MultipartFile file) throws IOException {
         String objectName = "candies/" + UUID.randomUUID() + "-" + file.getOriginalFilename();
 
@@ -82,16 +85,14 @@ public class MinioService {
         try{
    
             logger.info("Presigned URL with key: [{}]", newKey);
-            
-            return minioClient.getPresignedObjectUrl(
-                GetPresignedObjectUrlArgs.builder()
-                    .method(Method.GET)
-                    .bucket(bucketName)
-                    .object(newKey)
-                    .expiry((int)Duration.ofMinutes(60).getSeconds())
-                    .build()
-            );
 
+            String fileUrl = String.format("%s/%s/%s", 
+                minioEndpoint,
+                bucketName,
+                newKey
+            );
+            
+            return fileUrl;
 
         } catch(Exception e){
             logger.error("Error while getting file url: ", e);

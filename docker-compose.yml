@@ -30,14 +30,14 @@ services:
     environment:
       - 'RABBITMQ_DEFAULT_PASS=secret'
       - 'RABBITMQ_DEFAULT_USER=myuser'
-      - 'RABBITMQ_HOST=localhost'
+
     ports:  
       - '5672:5672'
 
   api:
     build:
-      context: .
-      dockerfile: Dockerfile 
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: spring_backend
     depends_on:
       - db
@@ -48,7 +48,7 @@ services:
       - "8080:8080"
     environment:
       DATASOURCE_URL: ${DATASOURCE_URL:-jdbc:postgresql://db:5432/pretty-cake-db}
-      DATASOURCE_USERNAME: ${DATASOURCE_USERNAME:-postgres}
+      DATASOURCE_USERNAME: ${DATASOURCE_USERNAME:-postgre}
       DATASOURCE_PASSWORD: ${DATASOURCE_PASSWORD:-postgrescake}
       
       MINIO_ENDPOINT: ${MINIO_ENDPOINT:-http://minio:9000}
@@ -67,6 +67,19 @@ services:
       RABBITMQ_HOST: ${RABBITMQ_HOST:-rabbitmq}
 
       FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+    env_file:
+      - ./frontend/.env
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api      
           
 
 volumes:

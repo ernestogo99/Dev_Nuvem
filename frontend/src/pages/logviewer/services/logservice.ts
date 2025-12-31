@@ -2,7 +2,7 @@ import { api } from "../../../shared/services/axiosconfig/config.ts";
 import type { LogEntry } from "../../../shared/interfaces/log.ts";
 
 
-const LOGS_ENDPOINT = "/api/logs";
+const LOGS_ENDPOINT = "/logs";
 
 const getAllLogs = async (): Promise<LogEntry[] | Error> => {
     try {

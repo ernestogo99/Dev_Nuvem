@@ -20,7 +20,6 @@ public class MinioConfig {
     private String minioEndpoint;
 
 
-
     @Bean
     public MinioClient MinioClient() {
 

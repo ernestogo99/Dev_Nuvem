@@ -51,9 +51,9 @@ import com.example.demo.services.UserDetailsServiceImpl;
                 // Set permissions on endpoints
                     .authorizeHttpRequests(auth -> auth
                             // public endpoints
-                            .requestMatchers(HttpMethod.POST, "/api/auth/signup/**").permitAll()
-                            .requestMatchers(HttpMethod.POST, "/api/auth/login/**").permitAll()
-                            .requestMatchers(HttpMethod.GET, "/api/candies/**").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/auth/signup/**").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/auth/login/**").permitAll()
+                            .requestMatchers(HttpMethod.GET, "/candies/**").permitAll()
                             .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
 
                             // private endpoints
