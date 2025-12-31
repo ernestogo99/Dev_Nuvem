@@ -6,7 +6,6 @@ import com.example.demo.domain.enums.LogActions;
 import com.example.demo.domain.model.Candy;
 import com.example.demo.exceptions.BadRequestException;
 import com.example.demo.exceptions.CandyNotFoundException;
-import com.example.demo.infra.aws.s3.S3Service;
 import com.example.demo.infra.repositories.CandyRepository;
 import com.example.demo.shared.dto.request.CandyRequestDTO;
 import com.example.demo.shared.dto.request.CrudLogRequestDTO;
@@ -39,7 +38,10 @@ public class CandyService {
 
 
     @Autowired
-    private S3Service s3Service;
+    private MinioService minioService;
+
+    @Autowired
+    private RabbitmqProducerService rabbitmqProducerService;
 
 
     public CandyResponseDTO createCandy(CandyRequestDTO candyRequestDTO, MultipartFile imageFile) {
@@ -49,8 +51,11 @@ public class CandyService {
             if(imageFile == null || imageFile.isEmpty()){
                 throw new BadRequestException("Image file is required");
             }
-            String imageKey = s3Service.uploadFile(imageFile);            
+            String imageKey = minioService.uploadFile(imageFile);       
             candy.setImageKey(imageKey);
+
+            String message = imageKey;
+            rabbitmqProducerService.send(message);
 
             Candy saved = this.candyRepository.save(candy);
 
@@ -193,7 +198,7 @@ public class CandyService {
      
         this.crudLogService.createLog(crudLogRequestDTO);
 
-        this.s3Service.deleteFile(candy.getImageKey());
+        this.minioService.deleteFile(candy.getImageKey());
         this.candyRepository.deleteById(id);
     }
 
@@ -207,7 +212,7 @@ public class CandyService {
         try{
 
             if(file != null && !file.isEmpty()){
-                String newKey = s3Service.updateFile(file, candy.getImageKey());
+                String newKey = minioService.updateFile(file, candy.getImageKey());
                 candy.setImageKey(newKey);   
             }
     
@@ -234,7 +239,7 @@ public class CandyService {
 
     public byte[] getImageFile(Long id)throws IOException{
         Candy candy = this.getCandy(id);
-        return s3Service.downloadFile(candy.getImageKey());
+        return minioService.downloadFile(candy.getImageKey());
     } 
 
     private Map<String, String> getMappedCandy(Candy candy){
@@ -248,7 +253,7 @@ public class CandyService {
     private CandyResponseDTO mapCandyWithImageUrl(Candy candy){
         CandyResponseDTO baseDto = candyMapper.toResponseDTO(candy);
 
-        String imageUrl = s3Service.getFileUrl(candy.getImageKey());
+        String imageUrl = minioService.getFileUrl(candy.getImageKey());
 
         return new CandyResponseDTO(baseDto.id(), baseDto.name(), baseDto.price(),
          baseDto.description(), baseDto.type(), imageUrl);
