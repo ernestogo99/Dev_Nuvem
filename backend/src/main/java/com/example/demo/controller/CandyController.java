@@ -18,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.http.RequestEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.context.annotation.Profile;
 
 import java.io.IOException;
 import java.net.http.HttpHeaders;
@@ -27,6 +28,7 @@ import java.util.List;
 @RequestMapping("/candies")
 @Tag(name = "Candies")
 @RequiredArgsConstructor
+@Profile("backend")
 public class CandyController {
 
     private final CandyService candyService;

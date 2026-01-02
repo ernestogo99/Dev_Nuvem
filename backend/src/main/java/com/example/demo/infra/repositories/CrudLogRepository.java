@@ -13,9 +13,11 @@ import software.amazon.awssdk.enhanced.dynamodb.model.QueryEnhancedRequest;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Profile("backend")
 public class CrudLogRepository {
 
     private final DynamoDbTable<CrudLog> logTable;

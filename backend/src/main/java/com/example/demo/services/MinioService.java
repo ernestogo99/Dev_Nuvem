@@ -87,7 +87,7 @@ public class MinioService {
             logger.info("Presigned URL with key: [{}]", newKey);
 
             String fileUrl = String.format("%s/%s/%s", 
-                minioEndpoint,
+                "http://localhost:9000",
                 bucketName,
                 newKey
             );

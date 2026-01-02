@@ -7,11 +7,13 @@ import com.example.demo.shared.dto.request.CrudLogRequestDTO;
 import com.example.demo.shared.dto.response.CrudLogResponseDTO;
 import com.example.demo.shared.mapper.CrudLogMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Profile("backend")
 public class CrudLogService {
 
     @Autowired

@@ -9,8 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.context.annotation.Profile;
+
 
 @DynamoDbBean
+@Profile("backend")
 public class CrudLog {
 
     private UUID id;   

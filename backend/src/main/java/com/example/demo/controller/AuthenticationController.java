@@ -20,12 +20,14 @@ import com.example.demo.shared.dto.request.SignupRequest;
 import com.example.demo.shared.dto.response.LoginResponse;
 import com.example.demo.shared.dto.request.LoginRequest;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.context.annotation.Profile;
 import jakarta.validation.Valid;
 
 
 
 @RestController
 @RequestMapping("/auth")
+@Profile("backend")
 public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;

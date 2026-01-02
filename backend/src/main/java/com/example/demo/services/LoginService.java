@@ -3,6 +3,7 @@ package com.example.demo.services;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +13,7 @@ import com.example.demo.infra.repositories.LoginAttemptRepository;
 
 @Service
 @Transactional(readOnly = true)
+@Profile("backend")
 public class LoginService {
     
     private final LoginAttemptRepository repository;
