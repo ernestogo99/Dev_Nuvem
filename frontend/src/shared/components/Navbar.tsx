@@ -12,6 +12,7 @@ import "@fontsource/federo/400.css";
 import NavigationMenu from "./NavigationMenu";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../contexts";
+import { Button } from "@mui/material";
 
 interface InavbarProps {
   sections: {
@@ -27,6 +28,7 @@ const Navbar: React.FC<InavbarProps> = ({ sections }) => {
   const isMenuOpen = Boolean(anchorEl);
   const navigate = useNavigate();
   const { logout } = useAuthContext();
+  const { isLogged } = useAuthContext();
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -79,6 +81,13 @@ const Navbar: React.FC<InavbarProps> = ({ sections }) => {
             >
               Pretty Cakes
             </Typography>
+            {!isLogged && (
+              <Button onClick={() => navigate("/logs")}>
+                <Typography fontFamily="Federo" color="black">
+                  View Actions history
+                </Typography>
+              </Button>
+            )}
             <Box sx={{ ml: "auto" }}>
               <IconButton
                 size="large"
@@ -95,6 +104,7 @@ const Navbar: React.FC<InavbarProps> = ({ sections }) => {
         </Container>
       </AppBar>
       {renderMenu}
+
       <Box display="flex" justifyContent="center">
         <NavigationMenu sections={sections} />
       </Box>
