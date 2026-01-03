@@ -10,11 +10,13 @@ import com.example.demo.shared.dto.request.SignupRequest;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
+@Profile("backend")
 @Transactional(readOnly = true)
 public class UserService {
 

@@ -2,6 +2,7 @@ package com.example.demo.infra.repositories;
 
 import java.util.Optional;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
@@ -9,6 +10,7 @@ import org.springframework.util.Assert;
 import com.example.demo.domain.model.Users;
 
 @Repository
+@Profile("backend")
 public class UserRepository{
    private static final String INSERT = "INSERT INTO public.users (full_name, email, password, role) VALUES(:full_name, :email, :password, :role)";
    private static final String FIND_BY_EMAIL = "SELECT * FROM public.users WHERE email = :email";

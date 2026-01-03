@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -8,6 +9,7 @@ import com.example.demo.domain.model.Users;
 import com.example.demo.infra.repositories.UserRepository;
 
 @Service
+@Profile("backend")
 public class UserDetailsServiceImpl implements UserDetailsService{
     private final UserRepository repository;
 

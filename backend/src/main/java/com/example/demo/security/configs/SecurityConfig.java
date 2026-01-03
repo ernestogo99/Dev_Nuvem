@@ -20,71 +20,73 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.context.annotation.Profile;
 
 import com.example.demo.services.UserDetailsServiceImpl;
 
-    @Configuration
-    @EnableWebSecurity
-    public class SecurityConfig {
-        @Value("${front.url}")
-        private String frontUrl;
-        private final UserDetailsServiceImpl userDetailsServiceImpl;
-        private final JwtAuthFilter jwtAuthFilter;
+@Configuration
+@EnableWebSecurity
+@Profile("backend")
+public class SecurityConfig {
+    @Value("${front.url}")
+    private String frontUrl;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
+    private final JwtAuthFilter jwtAuthFilter;
 
-        public SecurityConfig(UserDetailsServiceImpl userDetailsServiceImpl, JwtAuthFilter jwtAuthFilter){
-            this.userDetailsServiceImpl = userDetailsServiceImpl;
-            this.jwtAuthFilter = jwtAuthFilter;
-        }
-
-        @Bean
-        public PasswordEncoder passwordEncoder(){
-            return new BCryptPasswordEncoder();
-        }
-
-        @Bean
-        public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception{
-            return http
-                .cors(cors-> cors.configurationSource(corsConfigurationSource()))
-                //.cors(CorsConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // Set permissions on endpoints
-                    .authorizeHttpRequests(auth -> auth
-                            // public endpoints
-                            .requestMatchers(HttpMethod.POST, "/api/auth/signup/**").permitAll()
-                            .requestMatchers(HttpMethod.POST, "/api/auth/login/**").permitAll()
-                            .requestMatchers(HttpMethod.GET, "/api/candies/**").permitAll()
-                            .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-
-                            // private endpoints
-                            .anyRequest().authenticated()
-                ).authenticationManager(authenticationManager)
-
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
-        }
-
-          @Bean
-        public CorsConfigurationSource corsConfigurationSource() {
-            System.out.println("FRONTEND_URL configurada: " + frontUrl); // Debug
-            CorsConfiguration config = new CorsConfiguration();
-
-        
-            config.setAllowedOrigins(List.of(frontUrl));
-            config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-            config.setAllowCredentials(true);
-            config.setAllowedHeaders(List.of("*"));
-            config.setExposedHeaders(List.of("Authorization")); 
-            
-            UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-            source.registerCorsConfiguration("/**", config);
-            return source;
-        }
-
-        @Bean
-        public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception{
-            AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-            authenticationManagerBuilder.userDetailsService(userDetailsServiceImpl).passwordEncoder(passwordEncoder());
-            return authenticationManagerBuilder.build();
-        }
+    public SecurityConfig(UserDetailsServiceImpl userDetailsServiceImpl, JwtAuthFilter jwtAuthFilter){
+        this.userDetailsServiceImpl = userDetailsServiceImpl;
+        this.jwtAuthFilter = jwtAuthFilter;
     }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception{
+        return http
+            .cors(cors-> cors.configurationSource(corsConfigurationSource()))
+            //.cors(CorsConfigurer::disable)
+            .csrf(AbstractHttpConfigurer::disable)
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            // Set permissions on endpoints
+                .authorizeHttpRequests(auth -> auth
+                        // public endpoints
+                        .requestMatchers(HttpMethod.POST, "/auth/signup/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/login/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/candies/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+
+                        // private endpoints
+                        .anyRequest().authenticated()
+            ).authenticationManager(authenticationManager)
+
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+            .build();
+    }
+
+        @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        System.out.println("FRONTEND_URL configurada: " + frontUrl); // Debug
+        CorsConfiguration config = new CorsConfiguration();
+
+    
+        config.setAllowedOrigins(List.of(frontUrl));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowCredentials(true);
+        config.setAllowedHeaders(List.of("*"));
+        config.setExposedHeaders(List.of("Authorization")); 
+        
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception{
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.userDetailsService(userDetailsServiceImpl).passwordEncoder(passwordEncoder());
+        return authenticationManagerBuilder.build();
+    }
+}

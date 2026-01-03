@@ -9,12 +9,14 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 import net.coobird.thumbnailator.Thumbnails;
 
 @Component
+@Profile("worker")
 public class RabbitmqConsumerService {
 
     @Autowired

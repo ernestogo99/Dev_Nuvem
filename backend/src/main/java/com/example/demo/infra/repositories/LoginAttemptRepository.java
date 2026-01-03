@@ -7,8 +7,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 import com.example.demo.domain.model.LoginAttempt;
+import org.springframework.context.annotation.Profile;
 
 @Repository
+@Profile("backend")
 public class LoginAttemptRepository {
 
     private static final int RECENT_COUNT = 10;

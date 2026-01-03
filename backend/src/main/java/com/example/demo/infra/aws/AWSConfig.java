@@ -3,6 +3,8 @@ package com.example.demo.infra.aws;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.AwsSessionCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -12,6 +14,7 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
 
 @Configuration
+@Profile("backend")
 public class AWSConfig {
 
     @Value("${spring.cloud.aws.region.static}")

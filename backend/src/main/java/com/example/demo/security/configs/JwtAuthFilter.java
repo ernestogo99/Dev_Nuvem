@@ -21,8 +21,10 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.context.annotation.Profile;
 
 @Component
+@Profile("backend")
 public class JwtAuthFilter extends OncePerRequestFilter{
 
     private final UserDetailsServiceImpl userDetailsServiceImpl;
