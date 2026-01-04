@@ -5,8 +5,14 @@
    npm install
    ```
 2. Run the project:
+
    ```sh
    npm run dev
+   ```
+
+3. Run using docker:
+   ```sh
+   docker compose up dev
    ```
 
 ## Project Folder Structure
