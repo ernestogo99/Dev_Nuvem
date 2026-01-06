@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: api
+  name: api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+      - image: gcirineu18/prettycake-api:1.0.2
+        name: api
+        ports:
+          - containerPort: 8080
+        envFrom:
+          - secretRef:
+              name: pretty-secrets  
+        resources: {}
+        env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: backend
