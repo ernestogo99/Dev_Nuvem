@@ -23,6 +23,8 @@ DynamoDB, Postgres, MinIO, RabbitMQ, Docker and Kubernetes
  - MinIO: Object storage compatible with S3 used for media and assets
  - RabbitMQ: Message broker used for async processing between services
  - Docker: Containerization to run the stack locally via docker compose
+ - Kubernetes: Container orchestration platform used to deploy, scale, and manage containerized applications in production environments
+
 
 
 ## Running with Docker Compose
