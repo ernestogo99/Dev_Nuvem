@@ -10,10 +10,6 @@
    npm run dev
    ```
 
-3. Run using docker:
-   ```sh
-   docker compose up dev
-   ```
 
 ## Project Folder Structure
 

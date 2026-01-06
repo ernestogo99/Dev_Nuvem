@@ -12,10 +12,6 @@
 	```sh
 	./mvnw spring-boot:run -Dspring-boot.run.profiles=worker
 	```
-4. Run using docker compose (brings up db, minio, rabbitmq, api, worker):
-	```sh
-	docker compose up api worker
-	```
 
 ## Project Folder Structure
 
