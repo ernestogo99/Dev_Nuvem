@@ -38,6 +38,9 @@ public class MinioService {
     @Value("${minio.endpoint}")
     private String minioEndpoint;
 
+    @Value("${minio.url}")
+    private String minioUrl;
+
     public String uploadFile(MultipartFile file) throws IOException {
         String objectName = "candies/" + UUID.randomUUID() + "-" + file.getOriginalFilename();
 
@@ -84,10 +87,10 @@ public class MinioService {
   
         try{
    
-            logger.info("Presigned URL with key: [{}]", newKey);
+            logger.info(" URL with key: [{}]", minioUrl,newKey);
 
             String fileUrl = String.format("%s/%s/%s", 
-                "http://localhost:9000",
+                minioUrl,
                 bucketName,
                 newKey
             );
